@@ -1,10 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'My Wishlist - Pearls By HM')
+@section('title', 'your Wishlist - Pearls By HM')
 
 @section('content')
     <div class="container py-4">
-        <h3 class="mb-4">❤️ My Wishlist</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Your Wishlist</li>
+            </ol>
+        </nav>
+
+        <h3 class="mb-4 fw-bold" style="font-family: Arial, sans-serif">Your Wishlist</h3>
 
         @if ($wishlistItems->isEmpty())
             <div class="alert alert-info text-center">
