@@ -11,9 +11,4 @@ class Wishlist extends Model
         'session_id',
         'product_id',
     ];
-
-    // public function product()
-    // {
-    //     return $this->belongsTo(\App\Models\Product::class);
-    // }
 }

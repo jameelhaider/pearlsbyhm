@@ -44,6 +44,9 @@ class WishlistController extends Controller
                 'products.id as product_id',
                 'products.name',
                 'products.price',
+                'products.actual_price',
+                'products.image',
+                'products.hover_image',
                 'products.description'
             )
             ->where(function ($q) {

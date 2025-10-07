@@ -4,23 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Cart;
+use App\Models\Wishlist;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
     use RegistersUsers;
 
     /**
@@ -58,15 +49,39 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
+     * Also attaches any existing guest cart & wishlist to the new user account.
+     *
      * @param  array  $data
      * @return \App\Models\User
      */
     protected function create(array $data)
     {
-        return User::create([
+        // 1️⃣ Create the user account
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        // 2️⃣ Get current session ID (used for guest cart & wishlist)
+        $sessionId = session()->getId();
+
+        // 3️⃣ Attach guest cart to new user
+        Cart::where('session_id', $sessionId)
+            ->whereNull('user_id')
+            ->update([
+                'user_id' => $user->id,
+                'session_id' => null,
+            ]);
+
+        // 4️⃣ Attach guest wishlist to new user
+        Wishlist::where('session_id', $sessionId)
+            ->whereNull('user_id')
+            ->update([
+                'user_id' => $user->id,
+                'session_id' => null,
+            ]);
+
+        return $user;
     }
 }

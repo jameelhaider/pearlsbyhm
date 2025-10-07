@@ -11,9 +11,4 @@ class Cart extends Model
         'session_id',
     ];
 
-    public function items()
-    {
-        return $this->hasMany(CartItem::class);
-    }
-
 }

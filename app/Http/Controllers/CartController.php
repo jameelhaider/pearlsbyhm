@@ -11,24 +11,55 @@ use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
+
     public function addToCart(Request $request)
     {
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
         ]);
+
         $productId = $request->product_id;
         $quantity = 1;
-        $cart = Cart::firstOrCreate([
-            'user_id' => Auth::id(),
-            'session_id' => Auth::check() ? null : session()->getId(),
-        ]);
-        $item = $cart->items()->where('product_id', $productId)->first();
-        if ($item) {
-            $item->increment('qty', $quantity);
+        $userId = Auth::id();
+        $sessionId = Auth::check() ? null : session()->getId();
+        $cart = DB::table('carts')
+            ->where(function ($q) use ($userId, $sessionId) {
+                if ($userId) {
+                    $q->where('user_id', $userId);
+                } else {
+                    $q->where('session_id', $sessionId);
+                }
+            })
+            ->first();
+        if (!$cart) {
+            $cartId = DB::table('carts')->insertGetId([
+                'user_id' => $userId,
+                'session_id' => $sessionId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         } else {
-            $cart->items()->create([
+            $cartId = $cart->id;
+        }
+        $cartItem = DB::table('cart_items')
+            ->where('cart_id', $cartId)
+            ->where('product_id', $productId)
+            ->first();
+
+        if ($cartItem) {
+            DB::table('cart_items')
+                ->where('id', $cartItem->id)
+                ->update([
+                    'qty' => $cartItem->qty + $quantity,
+                    'updated_at' => now(),
+                ]);
+        } else {
+            DB::table('cart_items')->insert([
+                'cart_id' => $cartId,
                 'product_id' => $productId,
                 'qty' => $quantity,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
         return back()->with('success', 'Product added to cart!');
@@ -45,6 +76,7 @@ class CartController extends Controller
                 'products.id as product_id',
                 'products.name',
                 'products.price',
+                'products.image',
                 'cart_items.qty'
             )
             ->where(function ($q) {

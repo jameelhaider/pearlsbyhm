@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{{ asset('uploads/c2.png') }}" />
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
 
 <style>
@@ -53,16 +52,25 @@
                     <ul class="navbar-nav me-auto"></ul>
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('wishlist.index') }}">{{ __('Wishlist') }}</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cart.index') }}">{{ __('Cart') }}</a>
+                            <a class="nav-link mt-2" style="font-size: 1.2rem;" href="{{ route('wishlist.index') }}">{{ __('Wish List') }}</a>
                         </li>
 
-                        @guest
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasLogin" aria-controls="offcanvasLogin">
+                                <i class="bi bi-person" style="font-size: 1.7rem;"></i>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('cart.index') }}">
+                                <i class="bi bi-cart" style="font-size: 1.7rem;"></i>
+                            </a>
+                        </li>
+
+                        {{-- @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    {{-- 🔹 Instead of route link, trigger offcanvas --}}
                                     <a class="nav-link" href="#" data-bs-toggle="offcanvas"
                                         data-bs-target="#offcanvasLogin" aria-controls="offcanvasLogin">
                                         {{ __('Login') }}
@@ -91,7 +99,8 @@
                                     </form>
                                 </div>
                             </li>
-                        @endguest
+                        @endguest --}}
+
                     </ul>
                 </div>
             </div>
@@ -158,47 +167,85 @@
     </style>
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasLogin" aria-labelledby="offcanvasLoginLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title custom-font" id="offcanvasLoginLabel">Login</h5>
+            @guest
+                <h5 class="offcanvas-title custom-font" id="offcanvasLoginLabel">Login</h5>
+            @else
+                <h5 class="offcanvas-title fw-bold" style="font-family:Arial, sans-serif" id="offcanvasLoginLabel">
+                    Hi, {{ Auth::user()->name }}
+                </h5>
+            @endguest
+
+
+
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
 
         <div class="offcanvas-body p-3">
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-                <div class="mb-3">
-                    <label for="email" class="custom-font my-2">Your Email Address <span
-                            class="text-danger">*</span></label>
-                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                        name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                    @error('email')
-                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                    @enderror
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="custom-font my-2">Password <span class="text-danger">*</span></label>
-                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                        name="password" required autocomplete="current-password">
-                    @error('password')
-                        <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                    @enderror
-                </div>
-                <div class="mb-3 form-check">
-                    <input class="form-check-input" type="checkbox" name="remember" id="remember2"
-                        {{ old('remember') ? 'checked' : '' }}>
-                    <label class="form-check-label custom-font" for="remember2">{{ __('Remember Me') }}</label>
-                </div>
-                <button type="submit" class="w-100 btn-solid-black">Log In</button>
-                @if (Route::has('password.request'))
-                    <div class="mt-3 text-center">
-                        <a class="small text-dark custom-font" href="{{ route('password.request') }}">
-                            {{ __('Forgot Your Password?') }}
-                        </a>
+
+            @guest
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="email" class="custom-font my-2">Your Email Address <span
+                                class="text-danger">*</span></label>
+                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                            name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                        @error('email')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
                     </div>
-                @endif
-            </form>
-            <a class="btn-outline-black btn mt-3 w-100" href="{{ route('register') }}">
-                Create Account
-            </a>
+                    <div class="mb-3">
+                        <label for="password" class="custom-font my-2">Password <span class="text-danger">*</span></label>
+                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
+                            name="password" required autocomplete="current-password">
+                        @error('password')
+                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                        @enderror
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input class="form-check-input" type="checkbox" name="remember" id="remember2"
+                            {{ old('remember') ? 'checked' : '' }}>
+                        <label class="form-check-label custom-font" for="remember2">{{ __('Remember Me') }}</label>
+                    </div>
+                    <button type="submit" class="w-100 btn-solid-black">Log In</button>
+                    @if (Route::has('password.request'))
+                        <div class="mt-3 text-center">
+                            <a class="small text-dark custom-font" href="{{ route('password.request') }}">
+                                {{ __('Forgot Your Password?') }}
+                            </a>
+                        </div>
+                    @endif
+                </form>
+                <a class="btn-outline-black btn mt-3 w-100" href="{{ route('register') }}">
+                    Create Account
+                </a>
+            @else
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" style="font-family:Arial, sans-serif">
+                        <a href="" class="text-decoration-none text-dark d-block">Account Details</a>
+                    </li>
+                    <li class="list-group-item" style="font-family:Arial, sans-serif">
+                        <a href="" class="text-decoration-none text-dark d-block">Addresses</a>
+                    </li>
+                    <li class="list-group-item" style="font-family:Arial, sans-serif">
+                        <a href="{{ route('password.request') }}" class="text-decoration-none text-dark d-block">Reset
+                            Your Password</a>
+                    </li>
+                    <li class="list-group-item" style="font-family:Arial, sans-serif">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="btn btn-link text-decoration-none text-dark p-0 m-0 d-block text-start">
+                                Log Out
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+
+            @endguest
+
+
+
         </div>
     </div>
 
