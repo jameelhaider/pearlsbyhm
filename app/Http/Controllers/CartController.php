@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
-
     public function addToCart(Request $request)
     {
         $request->validate([
@@ -19,99 +18,98 @@ class CartController extends Controller
         ]);
 
         $productId = $request->product_id;
-        $quantity = 1;
         $userId = Auth::id();
-        $sessionId = Auth::check() ? null : session()->getId();
-        $cart = DB::table('carts')
-            ->where(function ($q) use ($userId, $sessionId) {
-                if ($userId) {
-                    $q->where('user_id', $userId);
-                } else {
-                    $q->where('session_id', $sessionId);
-                }
-            })
-            ->first();
-        if (!$cart) {
-            $cartId = DB::table('carts')->insertGetId([
-                'user_id' => $userId,
-                'session_id' => $sessionId,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+        $guestId = getOrCreateGuestId();
+
+        if ($userId) {
+            $cart = Cart::firstOrCreate(['user_id' => $userId]);
         } else {
-            $cartId = $cart->id;
+            $cart = Cart::firstOrCreate(['guest_id' => $guestId]);
         }
-        $cartItem = DB::table('cart_items')
-            ->where('cart_id', $cartId)
+        $cartItem = CartItem::where('cart_id', $cart->id)
             ->where('product_id', $productId)
             ->first();
 
         if ($cartItem) {
-            DB::table('cart_items')
-                ->where('id', $cartItem->id)
-                ->update([
-                    'qty' => $cartItem->qty + $quantity,
-                    'updated_at' => now(),
-                ]);
+            $cartItem->qty += 1;
+            $cartItem->save();
         } else {
-            DB::table('cart_items')->insert([
-                'cart_id' => $cartId,
-                'product_id' => $productId,
-                'qty' => $quantity,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            $cartItem = new CartItem();
+            $cartItem->cart_id = $cart->id;
+            $cartItem->product_id = $productId;
+            $cartItem->qty = 1;
+            $cartItem->save();
         }
-        return back()->with('success', 'Product added to cart!');
+
+        return redirect()->back()->with('success', 'Item added to cart');
     }
 
 
     public function index()
     {
-        $cartItems = DB::table('carts')
-            ->join('cart_items', 'carts.id', '=', 'cart_items.cart_id')
+        $userId = Auth::id();
+        $guestId = getOrCreateGuestId();
+        $cartQuery = DB::table('carts');
+
+        if ($userId) {
+            $cartQuery->where('user_id', $userId);
+        } else {
+            $cartQuery->where('guest_id', $guestId);
+        }
+
+        $cart = $cartQuery->first();
+
+        if (!$cart) {
+            return view('cart.index', [
+                'cartItems' => collect(),
+                'total' => 0,
+            ]);
+        }
+        $cartItems = DB::table('cart_items')
             ->join('products', 'cart_items.product_id', '=', 'products.id')
             ->select(
+                'products.image as image',
+                'products.name as name',
+                'products.price as price',
                 'cart_items.id as cart_item_id',
-                'products.id as product_id',
-                'products.name',
-                'products.price',
-                'products.image',
-                'cart_items.qty'
+                'cart_items.qty as qty'
             )
-            ->where(function ($q) {
-                $q->where('carts.user_id', auth()->id())
-                    ->orWhere('carts.session_id', session()->getId());
-            })
+            ->where('cart_id', $cart->id)
             ->get();
-        $total = DB::table('carts')
-            ->join('cart_items', 'carts.id', '=', 'cart_items.cart_id')
-            ->join('products', 'cart_items.product_id', '=', 'products.id')
-            ->where(function ($q) {
-                $q->where('carts.user_id', auth()->id())
-                    ->orWhere('carts.session_id', session()->getId());
-            })
-            ->sum(DB::raw('products.price * cart_items.qty'));
-        $itemCount = DB::table('carts')
-            ->join('cart_items', 'carts.id', '=', 'cart_items.cart_id')
-            ->where(function ($q) {
-                $q->where('carts.user_id', auth()->id())
-                    ->orWhere('carts.session_id', session()->getId());
-            })
-            ->count();
+        $total = $cartItems->sum(function ($item) {
+            return $item->price * $item->qty;
+        });
 
-        return view('cart.index', [
-            'items' => $cartItems,
-            'total' => $total,
-            'itemCount' => $itemCount,
-        ]);
+        return view('cart.index', compact('cartItems', 'total'));
     }
+
 
     public function remove($id)
     {
-        $item = \App\Models\CartItem::findOrFail($id);
-        $item->delete();
-
+        $cartItem = DB::table('cart_items')->where('id', $id)->first();
+        if (!$cartItem) {
+            return back()->with('error', 'Item not found.');
+        }
+        $cartId = $cartItem->cart_id;
+        DB::table('cart_items')->where('id', $id)->delete();
+        $remainingItems = DB::table('cart_items')
+            ->where('cart_id', $cartId)
+            ->count();
+        if ($remainingItems === 0) {
+            DB::table('carts')->where('id', $cartId)->delete();
+        }
         return back()->with('success', 'Item removed from cart.');
+    }
+
+    public function updateQty(Request $request)
+    {
+        $request->validate([
+            'item_id' => 'required|integer',
+            'quantity' => 'required|integer|min:1',
+        ]);
+        $cartItem = CartItem::findOrFail($request->item_id);
+        $cartItem->qty = $request->quantity;
+        $cartItem->save();
+        return response()->json(['success' => true]);
     }
 }

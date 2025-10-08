@@ -8,7 +8,7 @@ class Wishlist extends Model
 {
     protected $fillable = [
         'user_id',
-        'session_id',
+        'guest_id',
         'product_id',
     ];
 }

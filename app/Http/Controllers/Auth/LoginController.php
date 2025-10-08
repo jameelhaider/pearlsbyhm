@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -40,10 +42,120 @@ class LoginController extends Controller
         $this->middleware('auth')->only('logout');
     }
 
+    protected function authenticated(Request $request, $user)
+    {
+        // Get the guest_id from cookie
+        $guestId = $request->cookie('guest_id');
+
+        if ($guestId) {
+            // 1️⃣ Merge Guest Cart into User Cart
+            $guestCart = DB::table('carts')->where('guest_id', $guestId)->first();
+
+            if ($guestCart) {
+                // Check if user already has a cart
+                $userCart = DB::table('carts')->where('user_id', $user->id)->first();
+
+                if ($userCart) {
+                    // Move guest cart items into user's existing cart
+                    $guestItems = DB::table('cart_items')->where('cart_id', $guestCart->id)->get();
+
+                    foreach ($guestItems as $item) {
+                        $existingItem = DB::table('cart_items')
+                            ->where('cart_id', $userCart->id)
+                            ->where('product_id', $item->product_id)
+                            ->first();
+
+                        if ($existingItem) {
+                            // Increment quantity if same product exists
+                            DB::table('cart_items')
+                                ->where('id', $existingItem->id)
+                                ->update([
+                                    'qty' => $existingItem->qty + $item->qty,
+                                    'updated_at' => now(),
+                                ]);
+                        } else {
+                            // Move the item to user cart
+                            DB::table('cart_items')
+                                ->where('id', $item->id)
+                                ->update([
+                                    'cart_id' => $userCart->id,
+                                    'updated_at' => now(),
+                                ]);
+                        }
+                    }
+
+                    // Delete the old guest cart
+                    DB::table('carts')->where('id', $guestCart->id)->delete();
+                } else {
+                    // If user has no cart, just assign guest cart to user
+                    DB::table('carts')
+                        ->where('id', $guestCart->id)
+                        ->update([
+                            'user_id' => $user->id,
+                            'guest_id' => null,
+                            'updated_at' => now(),
+                        ]);
+                }
+            }
+
+            // 2️⃣ Merge Guest Wishlist into User Wishlist
+            $guestWishlistItems = DB::table('wishlists')->where('guest_id', $guestId)->get();
+
+            foreach ($guestWishlistItems as $item) {
+                // Check if same product exists in user's wishlist
+                $exists = DB::table('wishlists')
+                    ->where('user_id', $user->id)
+                    ->where('product_id', $item->product_id)
+                    ->first();
+
+                if ($exists) {
+                    // Delete duplicate guest wishlist item
+                    DB::table('wishlists')->where('id', $item->id)->delete();
+                } else {
+                    // Assign guest wishlist item to user
+                    DB::table('wishlists')
+                        ->where('id', $item->id)
+                        ->update([
+                            'user_id' => $user->id,
+                            'guest_id' => null,
+                            'updated_at' => now(),
+                        ]);
+                }
+            }
+        }
+    }
+
 
     public function logout(Request $request)
     {
+        $user = Auth::user();
+
+        if ($user) {
+            $guestId = $request->cookie('guest_id');
+            if (!$guestId) {
+                $guestId = (string) \Illuminate\Support\Str::uuid();
+                cookie()->queue(cookie('guest_id', $guestId, 60 * 24 * 30));
+            }
+            $userCart = DB::table('carts')->where('user_id', $user->id)->first();
+            if ($userCart) {
+                DB::table('carts')
+                    ->where('id', $userCart->id)
+                    ->update([
+                        'user_id' => null,
+                        'guest_id' => $guestId,
+                        'updated_at' => now(),
+                    ]);
+            }
+            DB::table('wishlists')
+                ->where('user_id', $user->id)
+                ->update([
+                    'user_id' => null,
+                    'guest_id' => $guestId,
+                    'updated_at' => now(),
+                ]);
+        }
         Auth::guard('web')->logout();
+        $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
     }

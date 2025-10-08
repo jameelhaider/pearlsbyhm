@@ -56,32 +56,10 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        // 1️⃣ Create the user account
-        $user = User::create([
+        User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-
-        // 2️⃣ Get current session ID (used for guest cart & wishlist)
-        $sessionId = session()->getId();
-
-        // 3️⃣ Attach guest cart to new user
-        Cart::where('session_id', $sessionId)
-            ->whereNull('user_id')
-            ->update([
-                'user_id' => $user->id,
-                'session_id' => null,
-            ]);
-
-        // 4️⃣ Attach guest wishlist to new user
-        Wishlist::where('session_id', $sessionId)
-            ->whereNull('user_id')
-            ->update([
-                'user_id' => $user->id,
-                'session_id' => null,
-            ]);
-
-        return $user;
     }
 }

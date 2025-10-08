@@ -35,7 +35,6 @@ class ProductsController extends Controller
 
     public function submit(Request $request)
     {
-        // return $request;
         $product = new Product();
         if ($request->has("image")) {
             $productimage = CommonController::imgUpload($request->image, 'Products Images');
