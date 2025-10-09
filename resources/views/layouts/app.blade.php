@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
 
@@ -35,6 +36,77 @@
 </style>
 
 <body>
+    <style>
+        .loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Semi-transparent white background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            /* Ensure it appears above other elements */
+        }
+
+        .loader {
+            width: 50px;
+            aspect-ratio: 1;
+            display: grid;
+            border-radius: 50%;
+            background: linear-gradient(0deg, rgb(0 0 0/50%) 30%, #0000 0 70%, rgb(0 0 0/100%) 0) 50%/8% 100%,
+                linear-gradient(90deg, rgb(0 0 0/25%) 30%, #0000 0 70%, rgb(0 0 0/75%) 0) 50%/100% 8%;
+            background-repeat: no-repeat;
+            animation: l23 1s infinite steps(12);
+        }
+
+        .loader::before,
+        .loader::after {
+            content: "";
+            grid-area: 1/1;
+            border-radius: 50%;
+            background: inherit;
+            opacity: 0.915;
+            transform: rotate(30deg);
+        }
+
+        .loader::after {
+            opacity: 0.83;
+            transform: rotate(60deg);
+        }
+
+        @keyframes l23 {
+            100% {
+                transform: rotate(1turn);
+            }
+        }
+    </style>
+    {{-- //loader --}}
+    <div class="loader-wrapper">
+        <div class="loader"></div>
+    </div>
+    <script>
+        function hideLoader() {
+            document.querySelector('.loader-wrapper').style.display = 'none';
+        }
+        setTimeout(function() {
+            if (document.readyState === 'complete') {
+                hideLoader();
+            } else {
+                document.onreadystatechange = function() {
+                    if (document.readyState === 'complete') {
+                        hideLoader();
+                    }
+                };
+            }
+        }, 700);
+    </script>
+    {{-- loader --}}
+
+
     <div id="app">
         <div class="py-1" style="background-color: #000;color:white">
             <h5 class="text-center mt-1" style="font-family: Arial, sans-serif">Free delivery on order above 2000.</h5>
@@ -52,7 +124,12 @@
                     <ul class="navbar-nav me-auto"></ul>
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link mt-2" style="font-size: 1.2rem;" href="{{ route('wishlist.index') }}">{{ __('Wish List') }}</a>
+                            <a class="nav-link mt-2" style="font-size: 1.2rem;"
+                                href="{{ route('track.order') }}">{{ __('Track My Order') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link mt-2" style="font-size: 1.2rem;"
+                                href="{{ route('wishlist.index') }}">{{ __('Wish List') }}</a>
                         </li>
 
                         <li class="nav-item">
@@ -65,6 +142,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('cart.index') }}">
                                 <i class="bi bi-cart" style="font-size: 1.7rem;"></i>
+                                <span class="badge bg-dark rounded-0">{{ getCartItemCount() }}</span>
                             </a>
                         </li>
 
@@ -222,10 +300,13 @@
             @else
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item" style="font-family:Arial, sans-serif">
-                        <a href="" class="text-decoration-none text-dark d-block">Account Details</a>
+                        <a href="{{ route('accounts.index') }}" class="text-decoration-none text-dark d-block">Account Details</a>
                     </li>
                     <li class="list-group-item" style="font-family:Arial, sans-serif">
-                        <a href="" class="text-decoration-none text-dark d-block">Addresses</a>
+                        <a href="{{ route('myaddresses.index') }}" class="text-decoration-none text-dark d-block">My Addresses</a>
+                    </li>
+                     <li class="list-group-item" style="font-family:Arial, sans-serif">
+                        <a href="{{ route('myorders.index') }}" class="text-decoration-none text-dark d-block">My Orders</a>
                     </li>
                     <li class="list-group-item" style="font-family:Arial, sans-serif">
                         <a href="{{ route('password.request') }}" class="text-decoration-none text-dark d-block">Reset

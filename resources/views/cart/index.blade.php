@@ -91,20 +91,21 @@
                 <li class="breadcrumb-item active" aria-current="page">Your Cart</li>
             </ol>
         </nav>
-        <h3 class="mb-4 fw-bold" style="font-family: Arial, sans-serif">Your Cart</h3>
+        <h3 class="fw-bold" style="font-family: Arial, sans-serif">Your Cart</h3>
 
         @if ($cartItems->isEmpty())
             <div class="text-center my-5">
                 <i style="font-size: 110px;" class="bi bi-emoji-frown"></i>
                 <h2 class="text-dark fw-bold" style="font-family:Arial, sans-serif">Your cart is empty</h2>
-                <p class="text-secondary" style="font-family:Arial, sans-serif">Looks like you haven't added any items yet.</p>
+                <p class="text-secondary" style="font-family:Arial, sans-serif">Looks like you haven't added any items yet.
+                </p>
                 <a href="{{ route('welcome') }}" class="btn-outline-black2 w-50 nav-link mt-3">
                     CONTINUE SHOPPING
                 </a>
             </div>
         @else
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-8 col-md-12 col-sm-12 col-12 mt-4">
                     <div class="table-responsive">
                         <table class="table">
                             <thead class="table-light table-header">
@@ -123,34 +124,78 @@
                             </thead>
                         </table>
                     </div>
+                    <div class="card p-4 mt-2 rounded-0">
+                        @foreach ($cartItems as $item)
+                            <div
+                                class="d-flex align-items-center justify-content-between border-bottom py-3 flex-wrap gap-3">
+                                <div class="d-flex align-items-center flex-grow-1" style="min-width: 200px;">
+                                    <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="rounded me-3"
+                                        style="width: 100px; height: 130px; object-fit: cover;">
+                                    <div>
+                                        <span class="d-block fw-semibold" style="font-family: Arial, sans-serif;">
+                                            {{ $item->name }}
+                                        </span>
+                                        <span class="text-muted d-block" style="font-family: Arial, sans-serif;">
+                                            {{ 'Rs.' . number_format($item->price, 2) }}
+                                        </span>
+                                    </div>
+                                </div>
 
-                    @foreach ($cartItems as $item)
-                        <div class="card p-4 mt-2 rounded-0">
-                            <div class="row">
-                                <div class="col-lg-2">
+                                <!-- Quantity Controls -->
+                                <div class="d-flex align-items-center justify-content-center" style="min-width: 140px;">
+                                    <div class="input-group input-group-sm quantity-group"
+                                        data-id="{{ $item->cart_item_id }}" style="max-width: 120px;">
+                                        <button class="btn btn-outline-dark minus-btn" type="button">−</button>
+                                        <input type="text" class="form-control text-center qty-input"
+                                            value="{{ $item->qty }}" min="1" readonly>
+                                        <button class="btn btn-outline-dark plus-btn" type="button">+</button>
+                                    </div>
+                                </div>
+
+                                <!-- Total Price -->
+                                <div class="text-center fw-bold" style="min-width: 100px; font-family: Arial, sans-serif;">
+                                    {{ 'Rs.' . number_format($item->price * $item->qty, 2) }}
+                                </div>
+
+                                <!-- Remove Button -->
+                                <div class="text-center" style="min-width: 50px;">
+                                    <form action="{{ route('cart.remove', $item->cart_item_id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-link text-danger p-0" title="Remove">
+                                            <i class="bi bi-x-lg fs-5"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+
+
+                            {{-- <div class="row">
+                                <div class="col-lg-2 col-md-2 col-6 col-sm-4">
                                     <img src="{{ asset($item->image) }}" height="130px" width="100px" alt="">
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-3 col-md-2 col-6 col-sm-4">
                                     <span>{{ $item->name }}</span>
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-2 col-md-2 col-3 col-sm-4">
                                     <span>{{ 'Rs.' . number_format($item->price, 2) }}</span>
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-2 col-md-3 col-4 col-sm-4">
                                     <div class="input-group quantity-group" data-id="{{ $item->cart_item_id }}">
                                         <button class="btn btn-outline-dark btn-sm minus-btn" type="button">−</button>
-                                        <input type="number" class="form-control qty-input" value="{{ $item->qty }}"
+                                        <input type="text" class="form-control qty-input" value="{{ $item->qty }}"
                                             min="1" readonly>
                                         <button class="btn btn-outline-dark btn-sm plus-btn" type="button">+</button>
                                     </div>
                                 </div>
 
 
-                                <div class="col-lg-2">
+                                <div class="col-lg-2 col-md-2 col-4 col-sm-4">
                                     <span>{{ 'Rs.' . number_format($item->price * $item->qty, 2) }}</span>
                                 </div>
 
-                                <div class="col-lg-1 text-center">
+                                <div class="col-lg-1 col-md-1 col-sm-4 col-1 text-center">
                                     <form action="{{ route('cart.remove', $item->cart_item_id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
@@ -163,14 +208,12 @@
 
 
 
-                            </div>
-
-
-                        </div>
-                    @endforeach
+                            </div> --}}
+                        @endforeach
+                    </div>
                 </div>
 
-                <div class="col-lg-4">
+                <div class="col-lg-4 col-md-12 col-12 col-sm-12 mt-4">
                     <h4 class="mt-1" style="font-family: Arial, sans-serif;letter-spacing: 1px;font-size: 16px;">ORDER
                         SUMMARY</h4>
                     <hr>

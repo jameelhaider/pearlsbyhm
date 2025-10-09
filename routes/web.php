@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountsController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\CartController;
@@ -60,9 +61,15 @@ Route::post('/cart/update-qty', [CartController::class, 'updateQty'])->name('car
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
 
+Route::get('/track-my-order', [CheckoutController::class, 'trackmyorder'])->name('track.order');
 
 
 
+Route::middleware(['auth'])->prefix('accounts')->group(function () {
+    Route::get('/', [AccountsController::class, 'index'])->name('accounts.index');
+    Route::get('/my-orders', [AccountsController::class, 'myorders'])->name('myorders.index');
+    Route::get('/addresses', [AccountsController::class, 'myaddresses'])->name('myaddresses.index');
+});
 
 
 Auth::routes();
