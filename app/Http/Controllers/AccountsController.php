@@ -20,6 +20,7 @@ class AccountsController extends Controller
     }
        public function myaddresses()
     {
-        return view('accounts.myaddresses');
+        $myaddresses=DB::table('addresses')->where('user_id',Auth::id())->get();
+        return view('accounts.myaddresses',compact('myaddresses'));
     }
 }
