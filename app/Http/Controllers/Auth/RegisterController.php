@@ -4,39 +4,23 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Cart;
-use App\Models\Wishlist;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
     use RegistersUsers;
 
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
     protected $redirectTo = '/';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest');
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
     protected function validator(array $data)
     {
         return Validator::make($data, [
@@ -46,20 +30,80 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * Also attaches any existing guest cart & wishlist to the new user account.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
     protected function create(array $data)
     {
-        User::create([
+        return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    /**
+     * Handle actions after registration.
+     */
+    protected function registered(Request $request, $user)
+    {
+        $guestId = $request->cookie('guest_id');
+
+        if ($guestId) {
+            $guestCart = DB::table('carts')->where('guest_id', $guestId)->first();
+            if ($guestCart) {
+                $userCart = DB::table('carts')->where('user_id', $user->id)->first();
+                if ($userCart) {
+                    $guestItems = DB::table('cart_items')->where('cart_id', $guestCart->id)->get();
+                    foreach ($guestItems as $item) {
+                        $existingItem = DB::table('cart_items')
+                            ->where('cart_id', $userCart->id)
+                            ->where('product_id', $item->product_id)
+                            ->first();
+
+                        if ($existingItem) {
+                            DB::table('cart_items')
+                                ->where('id', $existingItem->id)
+                                ->update([
+                                    'qty' => $existingItem->qty + $item->qty,
+                                    'updated_at' => now(),
+                                ]);
+                        } else {
+                            DB::table('cart_items')
+                                ->where('id', $item->id)
+                                ->update([
+                                    'cart_id' => $userCart->id,
+                                    'updated_at' => now(),
+                                ]);
+                        }
+                    }
+                    DB::table('carts')->where('id', $guestCart->id)->delete();
+                } else {
+                    DB::table('carts')
+                        ->where('id', $guestCart->id)
+                        ->update([
+                            'user_id' => $user->id,
+                            'guest_id' => null,
+                            'updated_at' => now(),
+                        ]);
+                }
+            }
+            $guestWishlistItems = DB::table('wishlists')->where('guest_id', $guestId)->get();
+            foreach ($guestWishlistItems as $item) {
+                $exists = DB::table('wishlists')
+                    ->where('user_id', $user->id)
+                    ->where('product_id', $item->product_id)
+                    ->first();
+
+                if ($exists) {
+                    DB::table('wishlists')->where('id', $item->id)->delete();
+                } else {
+                    DB::table('wishlists')
+                        ->where('id', $item->id)
+                        ->update([
+                            'user_id' => $user->id,
+                            'guest_id' => null,
+                            'updated_at' => now(),
+                        ]);
+                }
+            }
+        }
     }
 }

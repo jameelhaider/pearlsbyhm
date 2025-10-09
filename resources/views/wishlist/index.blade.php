@@ -3,6 +3,54 @@
 @section('title', 'Your Wishlist - Pearls By HM')
 
 @section('content')
+    <style>
+        .btn-outline-black2,
+        .btn-solid-black2 {
+            display: inline-block;
+            font-family: 'Montserrat', Arial, sans-serif;
+            letter-spacing: 2px;
+            padding: 8px 0px;
+            font-size: 15px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 0;
+            box-shadow: none;
+            transition: all 0.4s ease;
+        }
+
+        .custom-font2 {
+            font-family: Arial, sans-serif;
+            letter-spacing: 1px;
+            font-size: 18px;
+        }
+
+        .btn-outline-black2 {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #000;
+        }
+
+        .btn-outline-black2:hover {
+            background-color: #000;
+            color: #fff;
+            border-color: #000;
+            opacity: 0.9;
+        }
+
+        .btn-solid-black2 {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid transparent;
+            text-transform: uppercase;
+        }
+
+        .btn-solid-black2:hover {
+            background-color: #fff;
+            color: #000;
+            border-color: #000;
+            opacity: 0.9;
+        }
+    </style>
     <div class="container-fluid px-5 py-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -14,60 +62,16 @@
         <h3 class="mb-4 fw-bold" style="font-family: Arial, sans-serif">Your Wishlist</h3>
 
         @if ($wishlistItems->isEmpty())
-            <div class="alert alert-info text-center">
-                Your wishlist is empty 😔
+            <div class="text-center my-5">
+                <i style="font-size: 110px;" class="bi bi-emoji-frown"></i>
+                <h2 class="text-dark fw-bold" style="font-family:Arial, sans-serif">Your WishList is empty</h2>
+                <p class="text-secondary" style="font-family:Arial, sans-serif">Looks like you haven't added any items yet.
+                </p>
+                <a href="{{ route('welcome') }}" class="btn-solid-black w-50 nav-link mt-3">
+                    BROWSE PRODUCTS
+                </a>
             </div>
         @else
-            <style>
-                .btn-outline-black2,
-                .btn-solid-black2 {
-                    display: inline-block;
-                    font-family: 'Montserrat', Arial, sans-serif;
-                    letter-spacing: 2px;
-                    padding: 8px 0px;
-                    font-size: 15px;
-                    text-align: center;
-                    cursor: pointer;
-                    border-radius: 0;
-                    box-shadow: none;
-                    transition: all 0.4s ease;
-                }
-
-                .custom-font2 {
-                    font-family: Arial, sans-serif;
-                    letter-spacing: 1px;
-                    font-size: 18px;
-                }
-
-                .btn-outline-black2 {
-                    background-color: #fff;
-                    color: #000;
-                    border: 1px solid #000;
-                }
-
-                .btn-outline-black2:hover {
-                    background-color: #000;
-                    color: #fff;
-                    border-color: #000;
-                    opacity: 0.9;
-                }
-
-                .btn-solid-black2 {
-                    background-color: #000;
-                    color: #fff;
-                    border: 1px solid transparent;
-                    text-transform: uppercase;
-                }
-
-                .btn-solid-black2:hover {
-                    background-color: #fff;
-                    color: #000;
-                    border-color: #000;
-                    opacity: 0.9;
-                }
-            </style>
-
-
             <div class="container-fluid">
                 <div class="row justify-content-around g-2 mt-2">
                     @foreach ($wishlistItems as $product)
@@ -96,10 +100,11 @@
                                         <button type="submit" class="btn-solid-black2 w-100">Move to Cart</button>
                                     </form>
 
-                                      <form action="{{ route('wishlist.remove', $product->wishlist_id) }}" method="POST">
+                                    <form action="{{ route('wishlist.remove', $product->wishlist_id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn-outline-black2 w-100 mt-1">REMOVE FROM WISHLIST</button>
+                                        <button type="submit" class="btn-outline-black2 w-100 mt-1">REMOVE FROM
+                                            WISHLIST</button>
                                     </form>
                                 </div>
 

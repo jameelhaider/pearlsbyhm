@@ -94,8 +94,13 @@
         <h3 class="mb-4 fw-bold" style="font-family: Arial, sans-serif">Your Cart</h3>
 
         @if ($cartItems->isEmpty())
-            <div class="alert alert-info text-center">
-                Your cart is empty 😔
+            <div class="text-center my-5">
+                <i style="font-size: 110px;" class="bi bi-emoji-frown"></i>
+                <h2 class="text-dark fw-bold" style="font-family:Arial, sans-serif">Your cart is empty</h2>
+                <p class="text-secondary" style="font-family:Arial, sans-serif">Looks like you haven't added any items yet.</p>
+                <a href="{{ route('welcome') }}" class="btn-outline-black2 w-50 nav-link mt-3">
+                    CONTINUE SHOPPING
+                </a>
             </div>
         @else
             <div class="row">

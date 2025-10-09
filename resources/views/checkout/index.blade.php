@@ -3,17 +3,17 @@
 @section('title', 'Checkout - Pearls BY HM')
 
 @section('content')
-    <div class="container px-5 py-4">
-        <nav aria-label="breadcrumb">
+
+
+    <div class="container px-5 py-4 mb-5">
+         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('cart.index') }}">Your Cart</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Checkout</li>
             </ol>
         </nav>
-    </div>
 
-    <div class="container mb-5">
         <form action="{{ route('checkout.store') }}" method="POST">
             @csrf
             <div class="row">
@@ -141,9 +141,9 @@
 
                     <hr>
                     <!-- Place Order Button -->
-                    <button type="submit" class="btn btn-dark w-100 py-2 fw-bold mt-3"
+                    <button type="submit" class="btn-outline-black nav-link w-100 mt-3"
                         style="font-family:Arial, sans-serif">
-                        Place Order
+                        PLACE ORDER <i class="bi bi-check-circle"></i>
                     </button>
                 </div>
             </div>

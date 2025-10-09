@@ -64,7 +64,8 @@
 
 
                     <div class="col-lg-4 col-md-4">
-                        <label for="" class="fw-bold mb-2">Product Hover Image<span class="text-danger">*</span></label>
+                        <label for="" class="fw-bold mb-2">Product Hover Image<span
+                                class="text-danger">*</span></label>
                         <input type="file" required class="form-control @error('hover_image') is-invalid @enderror"
                             name="hover_image">
                         @error('hover_image')
@@ -89,7 +90,7 @@
                         @enderror
                     </div>
 
-                     <div class="col-lg-4 col-md-4">
+                    <div class="col-lg-4 col-md-4">
                         <label for="" class="fw-bold mb-2">Actual Price<span class="text-danger">*</span></label>
                         <input type="number" min="2" placeholder="Actual Price" required
                             value="{{ old('actual_price', $product->actual_price) }}"
@@ -116,7 +117,8 @@
 
 
                     <div class="col-lg-4 col-md-4">
-                        <label for="" class="fw-bold mb-2">Product Description<span class="text-danger">*</span></label>
+                        <label for="" class="fw-bold mb-2">Product Description<span
+                                class="text-danger">*</span></label>
                         <input type="text" placeholder="Product Description" required
                             value="{{ old('description', $product->description) }}"
                             class="form-control @error('description') is-invalid @enderror" name="description">

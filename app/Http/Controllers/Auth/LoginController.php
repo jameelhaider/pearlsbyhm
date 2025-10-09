@@ -44,21 +44,13 @@ class LoginController extends Controller
 
     protected function authenticated(Request $request, $user)
     {
-        // Get the guest_id from cookie
         $guestId = $request->cookie('guest_id');
-
         if ($guestId) {
-            // 1️⃣ Merge Guest Cart into User Cart
             $guestCart = DB::table('carts')->where('guest_id', $guestId)->first();
-
             if ($guestCart) {
-                // Check if user already has a cart
                 $userCart = DB::table('carts')->where('user_id', $user->id)->first();
-
                 if ($userCart) {
-                    // Move guest cart items into user's existing cart
                     $guestItems = DB::table('cart_items')->where('cart_id', $guestCart->id)->get();
-
                     foreach ($guestItems as $item) {
                         $existingItem = DB::table('cart_items')
                             ->where('cart_id', $userCart->id)
@@ -66,7 +58,6 @@ class LoginController extends Controller
                             ->first();
 
                         if ($existingItem) {
-                            // Increment quantity if same product exists
                             DB::table('cart_items')
                                 ->where('id', $existingItem->id)
                                 ->update([
@@ -74,7 +65,6 @@ class LoginController extends Controller
                                     'updated_at' => now(),
                                 ]);
                         } else {
-                            // Move the item to user cart
                             DB::table('cart_items')
                                 ->where('id', $item->id)
                                 ->update([
@@ -83,11 +73,8 @@ class LoginController extends Controller
                                 ]);
                         }
                     }
-
-                    // Delete the old guest cart
                     DB::table('carts')->where('id', $guestCart->id)->delete();
                 } else {
-                    // If user has no cart, just assign guest cart to user
                     DB::table('carts')
                         ->where('id', $guestCart->id)
                         ->update([
@@ -97,22 +84,17 @@ class LoginController extends Controller
                         ]);
                 }
             }
-
-            // 2️⃣ Merge Guest Wishlist into User Wishlist
             $guestWishlistItems = DB::table('wishlists')->where('guest_id', $guestId)->get();
 
             foreach ($guestWishlistItems as $item) {
-                // Check if same product exists in user's wishlist
                 $exists = DB::table('wishlists')
                     ->where('user_id', $user->id)
                     ->where('product_id', $item->product_id)
                     ->first();
 
                 if ($exists) {
-                    // Delete duplicate guest wishlist item
                     DB::table('wishlists')->where('id', $item->id)->delete();
                 } else {
-                    // Assign guest wishlist item to user
                     DB::table('wishlists')
                         ->where('id', $item->id)
                         ->update([
