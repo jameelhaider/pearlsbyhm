@@ -12,98 +12,82 @@
         <div class="row justify-content-center">
             <h4 class="text-center fw-bold" style="font-family: Arimo, sans-serif;letter-spacing: 1px;">MY ORDERS
             </h4>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center">#</th>
-                        <th class="text-center">ID</th>
-                        <th class="text-center">Products / Items</th>
-                        <th scope="col">ADDRESS</th>
-                        <th class="text-center">BILL</th>
-                        <th class="text-center">DATE | TIME</th>
-                        <th class="text-center">ACTIONS</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($myorders as $key => $order)
-                        <tr>
-                            <th class="text-center" style="font-family: Arial, sans-serif">{{ ++$key }}</th>
-                            <td class="text-center" style="font-family: Arial, sans-serif">{{ $order->id }}</td>
-                            <td style="font-family: Arial, sans-serif">
-                                {{ $order->total_products .
-                                    ' ' .
-                                    ($order->total_products == 1 ? 'Product' : 'Products') .
-                                    ' / ' .
-                                    $order->total_items .
-                                    ' ' .
-                                    ($order->total_items == 1 ? 'Item' : 'Items') }}
-                                <br>
-                                @if ($order->status == 'Pending')
-                                    <span class="badge bg-danger rounded-0">{{ $order->status }}</span>
-                                @elseif ($order->status == 'In Process')
-                                    <span class="badge bg-warning rounded-0">{{ $order->status }}</span>
-                                @elseif ($order->status == 'Packed, Ready To Ship')
-                                    <span class="badge bg-primary rounded-0">{{ $order->status }}</span>
-                                @elseif ($order->status == 'Sent To Parcel Delivered Company')
-                                    <span class="badge bg-info rounded-0">{{ $order->status }}</span>
-                                @else
-                                    <span class="badge bg-success rounded-0">{{ $order->status }}</span>
-                                @endif
+              @if ($myorders->count() > 0)
+            <div class="row g-2 justify-content-center">
+                @foreach ($myorders as $order)
+                    <div class="col-12 col-md-10 col-lg-8">
+                        <div class="card border-0 rounded-0 shadow">
+                            <div class="card-body py-3 px-3">
 
-                            </td>
+                                {{-- Header --}}
+                                <div class="d-flex justify-content-between align-items-center flex-wrap mb-2">
+                                    <strong style="font-family: Arial, sans-serif;">
+                                        #{{ $order->id }} |
+                                        {{ \Carbon\Carbon::parse($order->created_at)->format('d M y, h:i A') }}
+                                    </strong>
 
-                            <td>
-                                <small>
-                                    <span style="font-family: Arial, sans-serif">
-                                        {{ $order->first_name . ' ' . $order->last_name . ' | ' . $order->phone . ' | ' . $order->city }}
+                                    @php
+                                        $badgeClass = match ($order->status) {
+                                            'Pending' => 'bg-danger',
+                                            'In Process' => 'bg-warning text-dark',
+                                            'Packed, Ready To Ship' => 'bg-primary',
+                                            'Sent To Parcel Delivered Company' => 'bg-info text-dark',
+                                            default => 'bg-success',
+                                        };
+                                    @endphp
+                                    <span class="badge {{ $badgeClass }} px-2 rounded-0 py-1">{{ $order->status }}</span>
+                                </div>
+
+                                {{-- Summary Row --}}
+                                <div class="d-flex justify-content-between flex-wrap small mb-1" style="font-family: Arial, sans-serif;">
+                                    <span><strong>Products:</strong> {{ $order->total_products }}</span>
+                                    <span><strong>Items:</strong> {{ $order->total_items }}</span>
+                                    <span><strong>Subtotal:</strong> Rs.{{ number_format($order->subtotal) }}</span>
+                                    <span><strong>Shipping:</strong> Rs.{{ number_format($order->shipping) }}</span>
+                                    <span class="fw-bold text-success"><strong>Total:</strong> Rs.{{ number_format($order->total) }}</span>
+                                </div>
+
+                                {{-- Address Row --}}
+                                <div class="small text-muted" style="font-family: Arial, sans-serif;">
+                                    <span class="d-block text-truncate" style="max-width: 100%;">
+                                        <strong>Address:</strong>
+                                        {{ $order->first_name }} {{ $order->last_name }} |
+                                        {{ $order->phone }} |
+                                        {{ $order->city }}
                                         @if (!empty($order->postal_code))
                                             | {{ $order->postal_code }}
                                         @endif
                                     </span>
-                                </small>
-
-                                <br>
-                                <small>
-                                    <span style="font-family: Arial, sans-serif">{{ $order->address }}
+                                    <span class="d-block text-truncate" style="max-width: 100%;">
+                                        {{ $order->address }}
                                         @if (!empty($order->landmark))
                                             | {{ $order->landmark }}
                                         @endif
                                     </span>
-                                </small>
-                            </td>
+                                </div>
 
-
-                            <td>
-                                <small><strong class="fw-bolder" style="font-family: Arial, sans-serif">SUB TOTAL:</strong>
-                                    <span class="text-dark float-end">Rs.{{ number_format($order->subtotal) }}</span>
-                                </small>
-                                <br>
-                                <small><strong class="fw-bolder" style="font-family: Arial, sans-serif">SHIPPING:</strong>
-                                    <span class="text-dark float-end">Rs.{{ number_format($order->shipping) }}</span>
-                                </small>
-                                <br>
-                                <small>
-                                    <strong class="fw-bolder" style="font-family: Arial, sans-serif">TOTAL:</strong>
-                                    <span class="text-dark float-end">
-                                        Rs.{{ number_format($order->total) }}
-                                    </span>
-                                </small>
-                            </td>
-
-
-
-                            <td class="text-center" style="font-family: Arial, sans-serif">
-                                {{ \Carbon\Carbon::parse($order->created_at)->format('d F y | h:i A') }}</td>
-
-                            <td class="text-center"><a href="" class="btn-outline-black nav-link">VIEW DETAILS</a>
-                            </td>
-
-
-                        </tr>
-                    @endforeach
-
-                </tbody>
-            </table>
+                                {{-- Actions --}}
+                                <div class="text-end mt-2">
+                                    <a href="#" class="btn-outline-black nav-link px-3 py-1 rounded-0 small">
+                                        VIEW DETAILS
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            {{-- Empty State --}}
+            <div class="text-center my-5">
+                <i class="bi bi-emoji-frown" style="font-size: 100px;"></i>
+                <h5 class="text-dark fw-bold" style="font-family: Arial, sans-serif;">No Order Placed Yet!</h5>
+                <p class="text-secondary" style="font-family: Arial, sans-serif;">Looks like you haven't placed any order yet.</p>
+                <a href="{{ route('welcome') }}" class="btn-solid-black w-50 nav-link mt-3">
+                    BROWSE PRODUCTS
+                </a>
+            </div>
+        @endif
         </div>
     </div>
 @endsection

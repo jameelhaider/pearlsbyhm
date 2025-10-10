@@ -76,9 +76,16 @@
                             <button type="submit" class="btn-create-account mt-2">
                                 Send Password Reset Link
                             </button>
+                            @if (Auth::check())
+<a class="text-dark ms-3 custom-font" href="{{ route('accounts.index') }}">
+                                {{ __('Cancel') }}
+                            </a>
+                            @else
                             <a class="text-dark ms-3 custom-font" href="{{ route('login') }}">
                                 {{ __('Cancel') }}
                             </a>
+                            @endif
+
                         </div>
                     </div>
                 </form>

@@ -68,7 +68,17 @@ Route::get('/track-my-order', [CheckoutController::class, 'trackmyorder'])->name
 Route::middleware(['auth'])->prefix('accounts')->group(function () {
     Route::get('/', [AccountsController::class, 'index'])->name('accounts.index');
     Route::get('/my-orders', [AccountsController::class, 'myorders'])->name('myorders.index');
-    Route::get('/addresses', [AccountsController::class, 'myaddresses'])->name('myaddresses.index');
+    Route::get('/addresses', [AccountsController::class, 'myaddresses'])->name('address.index');
+    Route::get('/addresses/create', [AccountsController::class, 'createaddress'])->name('address.create');
+    Route::get('/addresses/edit/{id}', [AccountsController::class, 'editaddress'])->name('address.edit');
+
+    Route::post('/addresses/save', [AccountsController::class, 'saveaddress'])->name('address.save');
+    Route::post('/addresses/update/{id}', [AccountsController::class, 'updateaddress'])->name('address.update');
+    Route::post('/addresses/delete/{id}', [AccountsController::class, 'deleteaddress'])->name('address.delete');
+
+
+    Route::get('/change-password', [AccountsController::class, 'changepassword'])->name('change.password');
+    Route::post('/change-password/save', [AccountsController::class, 'changepasswordsave'])->name('change.password.save');
 });
 
 

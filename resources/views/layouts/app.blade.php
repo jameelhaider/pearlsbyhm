@@ -303,13 +303,17 @@
                         <a href="{{ route('accounts.index') }}" class="text-decoration-none text-dark d-block">Account Details</a>
                     </li>
                     <li class="list-group-item" style="font-family:Arial, sans-serif">
-                        <a href="{{ route('myaddresses.index') }}" class="text-decoration-none text-dark d-block">My Addresses</a>
+                        <a href="{{ route('address.index') }}" class="text-decoration-none text-dark d-block">My Addresses</a>
                     </li>
                      <li class="list-group-item" style="font-family:Arial, sans-serif">
                         <a href="{{ route('myorders.index') }}" class="text-decoration-none text-dark d-block">My Orders</a>
                     </li>
                     <li class="list-group-item" style="font-family:Arial, sans-serif">
                         <a href="{{ route('password.request') }}" class="text-decoration-none text-dark d-block">Reset
+                            Your Password</a>
+                    </li>
+                     <li class="list-group-item" style="font-family:Arial, sans-serif">
+                        <a href="{{ route('change.password') }}" class="text-decoration-none text-dark d-block">Change
                             Your Password</a>
                     </li>
                     <li class="list-group-item" style="font-family:Arial, sans-serif">
