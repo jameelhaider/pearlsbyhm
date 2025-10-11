@@ -107,6 +107,87 @@
     {{-- loader --}}
 
 
+
+
+
+
+
+
+
+
+
+    <!-- ================= Floating Action Buttons ================= -->
+
+    <!-- WhatsApp Button (Bottom Left) -->
+    <a href="https://wa.me/923001234567" target="_blank"
+        class="btn btn-success shadow-lg d-flex align-items-center justify-content-center floating-btn whatsapp-btn">
+        <i class="bi bi-whatsapp fs-3"></i>
+    </a>
+
+    <!-- Cart Button (Bottom Right) -->
+    @if (!request()->routeIs('cart.index'))
+        <a href="{{ route('cart.index') }}"
+            class="btn btn-dark shadow-lg d-flex align-items-center justify-content-center floating-btn cart-btn position-fixed">
+            <i class="bi bi-cart fs-4"></i>
+
+            @php $cartCount = getCartItemCount(); @endphp
+            @if ($cartCount > 0)
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    {{ $cartCount }}
+                </span>
+            @endif
+        </a>
+    @endif
+
+
+    <!-- ================= Styles ================= -->
+    <style>
+        /* Common Floating Button Style */
+        .floating-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            z-index: 1055;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        /* WhatsApp Button (Bottom Left) */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #25D366;
+            border: none;
+        }
+
+        /* Cart Button (Bottom Right) */
+        .cart-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #000;
+            border: none;
+        }
+
+        /* Badge Styling */
+        .cart-btn .badge {
+            font-size: 0.7rem;
+            padding: 0.3em 0.5em;
+        }
+    </style>
+
+
+
+
+
+
+
+
     <div id="app">
         <div class="py-1" style="background-color: #000;color:white">
             <h5 class="text-center mt-1" style="font-family: Arial, sans-serif">Free delivery on order above 2000.</h5>
@@ -114,11 +195,24 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{ url('/') }}">Pearls By HM</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+
+                {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
+                </button> --}}
+
+                <!-- Offcanvas Toggler Button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
+
+
+
+
+
+
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto"></ul>
@@ -146,38 +240,6 @@
                             </a>
                         </li>
 
-                        {{-- @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#" data-bs-toggle="offcanvas"
-                                        data-bs-target="#offcanvasLogin" aria-controls="offcanvasLogin">
-                                        {{ __('Login') }}
-                                    </a>
-                                </li>
-                            @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest --}}
 
                     </ul>
                 </div>
@@ -258,65 +320,93 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
 
-        <div class="offcanvas-body p-3">
+        <div class="offcanvas-body p-0">
 
             @guest
-                <form method="POST" action="{{ route('login') }}">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="email" class="custom-font my-2">Your Email Address <span
-                                class="text-danger">*</span></label>
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                            name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                        @error('email')
-                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                        @enderror
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="custom-font my-2">Password <span class="text-danger">*</span></label>
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                            name="password" required autocomplete="current-password">
-                        @error('password')
-                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
-                        @enderror
-                    </div>
-                    <div class="mb-3 form-check">
-                        <input class="form-check-input" type="checkbox" name="remember" id="remember2"
-                            {{ old('remember') ? 'checked' : '' }}>
-                        <label class="form-check-label custom-font" for="remember2">{{ __('Remember Me') }}</label>
-                    </div>
-                    <button type="submit" class="w-100 btn-solid-black">Log In</button>
-                    @if (Route::has('password.request'))
-                        <div class="mt-3 text-center">
-                            <a class="small text-dark custom-font" href="{{ route('password.request') }}">
-                                {{ __('Forgot Your Password?') }}
-                            </a>
+                <div class="p-3">
+                    <form method="POST" action="{{ route('login') }}">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="email" class="custom-font my-2">Your Email Address <span
+                                    class="text-danger">*</span></label>
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                                name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                            @error('email')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
                         </div>
-                    @endif
-                </form>
-                <a class="btn-outline-black btn mt-3 w-100" href="{{ route('register') }}">
-                    Create Account
-                </a>
+                        <div class="mb-3">
+                            <label for="password" class="custom-font my-2">Password <span
+                                    class="text-danger">*</span></label>
+                            <input id="password" type="password"
+                                class="form-control @error('password') is-invalid @enderror" name="password" required
+                                autocomplete="current-password">
+                            @error('password')
+                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+                            @enderror
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input class="form-check-input" type="checkbox" name="remember" id="remember2"
+                                {{ old('remember') ? 'checked' : '' }}>
+                            <label class="form-check-label custom-font" for="remember2">{{ __('Remember Me') }}</label>
+                        </div>
+                        <button type="submit" class="w-100 btn-solid-black">Log In</button>
+                        @if (Route::has('password.request'))
+                            <div class="mt-3 text-center">
+                                <a class="small text-dark custom-font" href="{{ route('password.request') }}">
+                                    {{ __('Forgot Your Password?') }}
+                                </a>
+                            </div>
+                        @endif
+                    </form>
+                    <a class="btn-outline-black btn mt-3 w-100" href="{{ route('register') }}">
+                        Create Account
+                    </a>
+                </div>
             @else
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item" style="font-family:Arial, sans-serif">
-                        <a href="{{ route('accounts.index') }}" class="text-decoration-none text-dark d-block">Account Details</a>
+
+                    <li class="list-group-item {{ request()->routeIs('accounts.index') ? 'active' : '' }}"
+                        style="font-family: Arial, sans-serif;">
+                        <a href="{{ route('accounts.index') }}"
+                            class="text-decoration-none d-block {{ request()->routeIs('accounts.index') ? 'text-white' : 'text-dark' }}">
+                            Account Details
+                        </a>
                     </li>
-                    <li class="list-group-item" style="font-family:Arial, sans-serif">
-                        <a href="{{ route('address.index') }}" class="text-decoration-none text-dark d-block">My Addresses</a>
+
+                    <li class="list-group-item {{ request()->routeIs('address.index') ? 'active' : '' }}"
+                        style="font-family: Arial, sans-serif;">
+                        <a href="{{ route('address.index') }}"
+                            class="text-decoration-none d-block {{ request()->routeIs('address.index') ? 'text-white' : 'text-dark' }}">
+                            My Addresses
+                        </a>
                     </li>
-                     <li class="list-group-item" style="font-family:Arial, sans-serif">
-                        <a href="{{ route('myorders.index') }}" class="text-decoration-none text-dark d-block">My Orders</a>
+
+                    <li class="list-group-item {{ request()->routeIs('myorders.index') ? 'active' : '' }}"
+                        style="font-family: Arial, sans-serif;">
+                        <a href="{{ route('myorders.index') }}"
+                            class="text-decoration-none d-block {{ request()->routeIs('myorders.index') ? 'text-white' : 'text-dark' }}">
+                            My Orders
+                        </a>
                     </li>
-                    <li class="list-group-item" style="font-family:Arial, sans-serif">
-                        <a href="{{ route('password.request') }}" class="text-decoration-none text-dark d-block">Reset
-                            Your Password</a>
+
+                    <li class="list-group-item {{ request()->routeIs('password.request') ? 'active' : '' }}"
+                        style="font-family: Arial, sans-serif;">
+                        <a href="{{ route('password.request') }}"
+                            class="text-decoration-none d-block {{ request()->routeIs('password.request') ? 'text-white' : 'text-dark' }}">
+                            Reset Your Password
+                        </a>
                     </li>
-                     <li class="list-group-item" style="font-family:Arial, sans-serif">
-                        <a href="{{ route('change.password') }}" class="text-decoration-none text-dark d-block">Change
-                            Your Password</a>
+
+                    <li class="list-group-item {{ request()->routeIs('change.password') ? 'active' : '' }}"
+                        style="font-family: Arial, sans-serif;">
+                        <a href="{{ route('change.password') }}"
+                            class="text-decoration-none d-block {{ request()->routeIs('change.password') ? 'text-white' : 'text-dark' }}">
+                            Change Your Password
+                        </a>
                     </li>
-                    <li class="list-group-item" style="font-family:Arial, sans-serif">
+
+                    <li class="list-group-item" style="font-family: Arial, sans-serif;">
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
                             <button type="submit"
@@ -325,7 +415,9 @@
                             </button>
                         </form>
                     </li>
+
                 </ul>
+
 
             @endguest
 
@@ -333,6 +425,156 @@
 
         </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- ================= Offcanvas Sidebar ================= -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar"
+        aria-labelledby="offcanvasNavbarLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body p-0">
+
+            <!-- ===== Public Links ===== -->
+            <ul class="list-group list-group-flush">
+
+                <li class="list-group-item {{ request()->routeIs('welcome') ? 'active' : '' }}">
+                    <a href="{{ route('welcome') }}"
+                        class="text-decoration-none d-block {{ request()->routeIs('welcome') ? 'text-white' : 'text-dark' }}">
+                        Home
+                    </a>
+                </li>
+
+                <li class="list-group-item {{ request()->routeIs('track.order') ? 'active' : '' }}">
+                    <a href="{{ route('track.order') }}"
+                        class="text-decoration-none d-block {{ request()->routeIs('track.order') ? 'text-white' : 'text-dark' }}">
+                        Track My Order
+                    </a>
+                </li>
+
+                <li class="list-group-item {{ request()->routeIs('wishlist.index') ? 'active' : '' }}">
+                    <a href="{{ route('wishlist.index') }}"
+                        class="text-decoration-none d-block {{ request()->routeIs('wishlist.index') ? 'text-white' : 'text-dark' }}">
+                        My Wishlist
+                    </a>
+                </li>
+
+                <li class="list-group-item {{ request()->routeIs('cart.index') ? 'active' : '' }}">
+                    <a href="{{ route('cart.index') }}"
+                        class="text-decoration-none d-block {{ request()->routeIs('cart.index') ? 'text-white' : 'text-dark' }}">
+                        My Cart
+                        <span
+                            class="badge float-end rounded-0 {{ request()->routeIs('cart.index') ? 'bg-white text-dark' : 'bg-dark text-white' }}">
+                            {{ getCartItemCount() }}
+                        </span>
+                    </a>
+                </li>
+
+                @guest
+                    <li class="list-group-item {{ request()->routeIs('login') ? 'active' : '' }}">
+                        <a href="{{ route('login') }}"
+                            class="text-decoration-none d-block {{ request()->routeIs('login') ? 'text-white' : 'text-dark' }}">
+                            Login
+                        </a>
+                    </li>
+
+                    <li class="list-group-item {{ request()->routeIs('register') ? 'active' : '' }}">
+                        <a href="{{ route('register') }}"
+                            class="text-decoration-none d-block {{ request()->routeIs('register') ? 'text-white' : 'text-dark' }}">
+                            Register
+                        </a>
+                    </li>
+                @else
+                    <li class="list-group-item {{ request()->routeIs('accounts.index') ? 'active' : '' }}">
+                        <a href="{{ route('accounts.index') }}"
+                            class="text-decoration-none d-block {{ request()->routeIs('accounts.index') ? 'text-white' : 'text-dark' }}">
+                            Account Details
+                        </a>
+                    </li>
+
+                    <li class="list-group-item {{ request()->routeIs('address.index') ? 'active' : '' }}">
+                        <a href="{{ route('address.index') }}"
+                            class="text-decoration-none d-block {{ request()->routeIs('address.index') ? 'text-white' : 'text-dark' }}">
+                            My Addresses
+                        </a>
+                    </li>
+
+                    <li class="list-group-item {{ request()->routeIs('myorders.index') ? 'active' : '' }}">
+                        <a href="{{ route('myorders.index') }}"
+                            class="text-decoration-none d-block {{ request()->routeIs('myorders.index') ? 'text-white' : 'text-dark' }}">
+                            My Orders
+                        </a>
+                    </li>
+
+                    <li class="list-group-item {{ request()->routeIs('password.request') ? 'active' : '' }}">
+                        <a href="{{ route('password.request') }}"
+                            class="text-decoration-none d-block {{ request()->routeIs('password.request') ? 'text-white' : 'text-dark' }}">
+                            Reset Your Password
+                        </a>
+                    </li>
+
+                    <li class="list-group-item {{ request()->routeIs('change.password') ? 'active' : '' }}">
+                        <a href="{{ route('change.password') }}"
+                            class="text-decoration-none d-block {{ request()->routeIs('change.password') ? 'text-white' : 'text-dark' }}">
+                            Change Your Password
+                        </a>
+                    </li>
+
+                    <li class="list-group-item">
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="btn btn-link text-decoration-none text-dark p-0 m-0 d-block text-start">
+                                Log Out
+                            </button>
+                        </form>
+                    </li>
+                @endguest
+            </ul>
+
+
+        </div>
+    </div>
+
+    <!-- ================= Styles ================= -->
+    <style>
+        .list-group-item {
+            font-family: Arial, sans-serif;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .list-group-item.active {
+            background-color: #000 !important;
+            color: #fff !important;
+            border-color: #000 !important;
+        }
+
+        .list-group-item.active a {
+            color: #fff !important;
+        }
+
+        .offcanvas {
+            width: 280px;
+        }
+    </style>
 
 
 </body>

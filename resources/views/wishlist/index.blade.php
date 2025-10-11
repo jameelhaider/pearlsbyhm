@@ -67,7 +67,7 @@
                 <h2 class="text-dark fw-bold" style="font-family:Arial, sans-serif">Your WishList is empty</h2>
                 <p class="text-secondary" style="font-family:Arial, sans-serif">Looks like you haven't added any items yet.
                 </p>
-                <a href="{{ route('welcome') }}" class="btn-solid-black w-50 nav-link mt-3">
+                <a href="{{ route('welcome') }}" class="btn-solid-black w-75 nav-link mt-3">
                     BROWSE PRODUCTS
                 </a>
             </div>
