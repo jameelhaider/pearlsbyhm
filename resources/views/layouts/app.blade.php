@@ -9,8 +9,6 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('uploads/c2.png') }}" />
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 </head>
 
@@ -119,15 +117,15 @@
     <!-- ================= Floating Action Buttons ================= -->
 
     <!-- WhatsApp Button (Bottom Left) -->
-    <a href="https://wa.me/923001234567" target="_blank"
-        class="btn btn-success shadow-lg d-flex align-items-center justify-content-center floating-btn whatsapp-btn">
+    <a href="https://wa.me/923158425273" target="_blank"
+        class="btn btn-success shadow-lg d-flex align-items-center justify-content-center rounded-0 floating-btn whatsapp-btn">
         <i class="bi bi-whatsapp fs-3"></i>
     </a>
 
     <!-- Cart Button (Bottom Right) -->
     @if (!request()->routeIs('cart.index'))
         <a href="{{ route('cart.index') }}"
-            class="btn btn-dark shadow-lg d-flex align-items-center justify-content-center floating-btn cart-btn position-fixed">
+            class="btn btn-dark shadow-lg d-flex align-items-center justify-content-center rounded-0 floating-btn cart-btn position-fixed">
             <i class="bi bi-cart fs-4"></i>
 
             @php $cartCount = getCartItemCount(); @endphp
@@ -576,6 +574,115 @@
         }
     </style>
 
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light pt-5 pb-4">
+        <div class="container text-center text-md-start">
+            <div class="row">
+
+                <!-- Brand / About -->
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold text-uppercase mb-3">Pearls By HM</h5>
+                    <p class="small text-light">
+                        We bring you premium quality products with fast delivery and reliable customer service across
+                        Pakistan.
+                    </p>
+                    <div>
+                        <a href="#" class="text-light me-3 fs-5"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-light me-3 fs-5"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-light fs-5"><i class="bi bi-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-md-3 mb-4">
+                    <h6 class="fw-bold text-uppercase mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ route('welcome') }}" class="footer-link">Home</a></li>
+                        <li class="mb-2"><a href="{{ route('cart.index') }}" class="footer-link">My Cart</a></li>
+                        <li class="mb-2"><a href="{{ route('wishlist.index') }}" class="footer-link">My
+                                Wishlist</a></li>
+                        <li class="mb-2"><a href="{{ route('track.order') }}" class="footer-link">Track My
+                                Order</a></li>
+                    </ul>
+                </div>
+
+                <!-- Customer Support -->
+                <div class="col-md-3 mb-4">
+                    <h6 class="fw-bold text-uppercase mb-3">Customer Support</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="footer-link">FAQs</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Return Policy</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Shipping Info</a></li>
+                        <li class="mb-2"><a href="#" class="footer-link">Privacy Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div class="col-md-2 mb-4">
+                    <h6 class="fw-bold text-uppercase mb-3">Contact</h6>
+                    <p class="small mb-1"><i class="bi bi-geo-alt-fill me-2"></i>Gujranwala, Pakistan</p>
+                    <p class="small mb-1"><i class="bi bi-telephone-fill me-2"></i>+92 315 8425273</p>
+                </div>
+
+            </div>
+        </div>
+
+        <hr class="border-light opacity-25">
+
+        <!-- Bottom -->
+        <div class="text-center small text-light">
+            © <span id="year"></span> Pearls By HM. All Rights Reserved. <br>
+            Developed by
+            <a href="https://wa.me/923366886889" target="_blank"
+                class="text-success text-decoration-none fw-semibold">
+                 JH Developers
+            </a>
+        </div>
+    </footer>
+
+
+    <style>
+        .footer-link {
+            color: #bbb;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        footer .bi {
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        footer .bi:hover {
+            color: #0d6efd;
+            transform: translateY(-3px);
+        }
+
+        footer hr {
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+
+    <script>
+        // Auto-update copyright year
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
 
 </body>
 

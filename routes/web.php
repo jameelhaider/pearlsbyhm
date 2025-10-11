@@ -4,12 +4,15 @@ use App\Http\Controllers\AccountsController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\WishlistController;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -33,7 +36,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/delete/{id}', [ProductsController::class, 'delete'])->name("product.delete");
             Route::post('/update/{id}', [ProductsController::class, 'update'])->name("product.update");
             Route::get('/', [ProductsController::class, 'index'])->name("product.index");
+
+            Route::get('/delete/image/{id}', [ProductsController::class, 'deleteimage'])->name("product.deleteimage");
         });
+
+
+         Route::group(['prefix' => 'categories'], function () {
+            Route::post('/submit', [CategoryController::class, 'submit'])->name("category.submit");
+            Route::get('/create', [CategoryController::class, 'create'])->name("category.create");
+            Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name("category.edit");
+            Route::get('/delete/{id}', [CategoryController::class, 'delete'])->name("category.delete");
+            Route::post('/update/{id}', [CategoryController::class, 'update'])->name("category.update");
+            Route::get('/', [CategoryController::class, 'index'])->name("category.index");
+        });
+
     });
 });
 
@@ -43,8 +59,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::get('/', function () {
     $products = DB::table('products')
         ->get();
-    return view('welcome', compact('products'));
+    return view('welcome', compact('products','categories'));
 })->name('welcome');
+
+Route::get('/product/details/{id}', [ProductsController::class, 'productdetails'])->name('prduct.details');
 
 Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
