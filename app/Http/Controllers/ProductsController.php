@@ -24,6 +24,14 @@ class ProductsController extends Controller
     }
 
 
+   public function allproducts()
+{
+    $products = Product::latest()->paginate(50);
+    return view('products.index', compact('products'));
+}
+
+
+
 
     // public function create()
     // {

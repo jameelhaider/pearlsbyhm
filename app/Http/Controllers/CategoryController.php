@@ -2,33 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a list of categories
-     */
     public function index()
     {
         $categories = Category::whereNull('parent_id')->with('children')->get();
         return view('admin.categories.index', compact('categories'));
     }
-
-    /**
-     * Show form to create a new category
-     */
     public function create()
     {
-        // Get all categories for dropdown (to select parent)
         $categories = Category::whereNull('parent_id')->with('children')->get();
         return view('admin.categories.create', compact('categories'));
     }
-
-    /**
-     * Store new category
-     */
     public function submit(Request $request)
     {
         $request->validate([
@@ -44,10 +34,6 @@ class CategoryController extends Controller
         return redirect()->route('admin.category.index')
             ->with('success', 'Category added successfully.');
     }
-
-    /**
-     * Show form to edit a category
-     */
     public function edit($id)
     {
         $category = Category::findOrFail($id);
@@ -55,10 +41,6 @@ class CategoryController extends Controller
 
         return view('admin.categories.edit', compact('category', 'categories'));
     }
-
-    /**
-     * Update category
-     */
     public function update(Request $request, $id)
     {
         $category = Category::findOrFail($id);
@@ -76,10 +58,6 @@ class CategoryController extends Controller
         return redirect()->route('admin.category.index')
             ->with('success', 'Category updated successfully.');
     }
-
-    /**
-     * Delete category
-     */
     public function delete($id)
     {
         $category = Category::findOrFail($id);
@@ -87,5 +65,31 @@ class CategoryController extends Controller
 
         return redirect()->route('admin.category.index')
             ->with('success', 'Category deleted successfully.');
+    }
+
+
+    public function show($id)
+    {
+        $category = Category::with('parent')->findOrFail($id);
+        $breadcrumbs = $this->buildBreadcrumb($category);
+        $categoryIds = $this->getAllCategoryIds($category);
+        $products = Product::whereIn('category_id', $categoryIds)->paginate(20);
+        return view('categories.show', compact('category', 'products', 'breadcrumbs'));
+    }
+    private function getAllCategoryIds($category)
+    {
+        $ids = collect([$category->id]);
+        foreach ($category->children as $child) {
+            $ids = $ids->merge($this->getAllCategoryIds($child));
+        }
+        return $ids;
+    }
+    private function buildBreadcrumb($category, $trail = [])
+    {
+        $trail[] = $category;
+        if ($category->parent) {
+            return $this->buildBreadcrumb($category->parent, $trail);
+        }
+        return array_reverse($trail);
     }
 }

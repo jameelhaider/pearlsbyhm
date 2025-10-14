@@ -1,7 +1,8 @@
 @extends('layouts.app')
-
-@section('title', 'Your Wishlist - Pearls By HM')
-
+@php
+    $title=$category->name .' - Pearls By HM';
+@endphp
+@section('title', $title)
 @section('content')
     <style>
         .btn-outline-black2,
@@ -9,7 +10,7 @@
             display: inline-block;
             font-family: 'Montserrat', Arial, sans-serif;
             letter-spacing: 2px;
-            padding: 8px 0px;
+            padding: 12px 0px;
             font-size: 15px;
             text-align: center;
             cursor: pointer;
@@ -54,28 +55,41 @@
     <div class="container-fluid">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Your Wishlist</li>
+                <li class="breadcrumb-item">
+                    <a href="{{ url('/') }}">Home</a>
+                </li>
+
+                @foreach ($breadcrumbs as $crumb)
+                    @if (!$loop->last)
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('category.show', $crumb->id) }}">{{ $crumb->name }}</a>
+                        </li>
+                    @else
+                        <li class="breadcrumb-item active" aria-current="page">{{ $crumb->name }}</li>
+                    @endif
+                @endforeach
             </ol>
         </nav>
 
-        <h3 class="mb-4 fw-bold" style="font-family: Arial, sans-serif">Your Wishlist</h3>
 
-        @if ($wishlistItems->isEmpty())
+        <h3 class="mb-4 fw-bold" style="font-family: Arial, sans-serif">Products in {{ $category->name }}</h3>
+
+        @if ($products->isEmpty())
             <div class="text-center my-5">
                 <i style="font-size: 110px;" class="bi bi-emoji-frown"></i>
-                <h2 class="text-dark fw-bold" style="font-family:Arial, sans-serif">Your WishList is empty</h2>
-                <p class="text-secondary" style="font-family:Arial, sans-serif">Looks like you haven't added any items yet.
+                <h2 class="text-dark fw-bold" style="font-family:Arial, sans-serif">No Products Found For Category
+                    {{ $category->name }}</h2>
+                <p class="text-secondary" style="font-family:Arial, sans-serif">Looks like no products there.
                 </p>
                 <a href="{{ route('welcome') }}" class="btn-solid-black w-75 nav-link mt-3">
-                    BROWSE PRODUCTS
+                    BROWSE OTHER PRODUCTS
                 </a>
             </div>
         @else
-            <div class="container-fluid">
-                <div class="row justify-content-around g-2 mt-2">
-                    @foreach ($wishlistItems as $product)
-                        <div class="col-lg-3 col-12 col-md-4 col-sm-6">
+            <div class="row justify-content-around g-2 mt-2">
+                @foreach ($products as $product)
+                    <div class="col-lg-3 col-12 col-md-4 col-sm-6">
+                        <a href="{{ route('prduct.details', ['id' => $product->id]) }}" class="nav-link">
                             <div class="card rounded-0 product-card">
                                 <div class="image-wrapper">
                                     <img class="main-image img-fluid" src="{{ asset($product->image) }}"
@@ -96,22 +110,25 @@
                                 <div class="p-2">
                                     <form action="{{ route('cart.add') }}" method="POST" class="me-1 w-100">
                                         @csrf
-                                        <input type="hidden" name="product_id" value="{{ $product->product_id }}">
-                                        <button type="submit" class="btn-solid-black2 w-100">Move to Cart</button>
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <button type="submit" class="btn-solid-black2 w-100">Add to Cart</button>
                                     </form>
 
-                                    <form action="{{ route('wishlist.remove', $product->wishlist_id) }}" method="POST">
+                                    <form action="{{ route('wishlist.add') }}" method="POST" class="w-100 mt-1">
                                         @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-outline-black2 w-100 mt-1">REMOVE FROM
-                                            WISHLIST</button>
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <button type="submit" class="btn-outline-black2 w-100">ADD TO WISHLIST</button>
                                     </form>
                                 </div>
 
                             </div>
-                        </div>
-                    @endforeach
-                </div>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="mt-4 d-flex justify-content-center">
+             {{ $products->appends(request()->query())->links('pagination::bootstrap-5') }}
             </div>
 
             <style>
@@ -134,7 +151,6 @@
                     opacity: 0;
                 }
 
-                /* Hover effect */
                 .product-card:hover .image-wrapper .hover-image {
                     opacity: 1;
                     transform: scale(1.1);
@@ -145,9 +161,6 @@
                     transform: scale(1.1);
                 }
             </style>
-
-
-
         @endif
     </div>
 @endsection

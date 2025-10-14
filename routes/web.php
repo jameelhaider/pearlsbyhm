@@ -58,9 +58,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 Route::get('/', function () {
     $products = DB::table('products')
+        ->latest('created_at')  
+        ->take(16)
         ->get();
-    return view('welcome', compact('products','categories'));
+
+    return view('welcome', compact('products'));
 })->name('welcome');
+
+
+Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category.show');
+Route::get('/allproducts', [ProductsController::class, 'allproducts'])->name('products.all');
 
 Route::get('/product/details/{id}', [ProductsController::class, 'productdetails'])->name('prduct.details');
 

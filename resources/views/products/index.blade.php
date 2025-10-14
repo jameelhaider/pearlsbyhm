@@ -1,8 +1,9 @@
 @extends('layouts.app')
-@section('title', 'Pearls By HM - Online Shopping Store')
-@section('content')
 
-    <style>
+@section('title', 'All Products - Pearls By HM')
+
+@section('content')
+<style>
         .btn-outline-black2,
         .btn-solid-black2 {
             display: inline-block;
@@ -126,100 +127,4 @@
             transform: scale(1.1);
         }
     </style>
-
-
-
-
-    <div class="mt-5 bg-light py-5">
-        <div class="container">
-            <div class="row d-none d-md-flex text-center">
-                <div class="col-lg-4 col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="feature-box p-4 rounded-0 shadow-sm bg-white h-100">
-                        <i class="bi bi-truck display-5 text-primary mb-3"></i>
-                        <h5 class="fw-bold">Free Shipping</h5>
-                        <p class="text-muted small mb-0">Free nationwide delivery on orders above Rs. 2000.</p>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="feature-box p-4 rounded-0 shadow-sm bg-white h-100">
-                        <i class="bi bi-headset display-5 text-success mb-3"></i>
-                        <h5 class="fw-bold">Support</h5>
-                        <p class="text-muted small mb-0">Contact us 09:00 - 18:00 PKT (Mon–Sat) <br> +92336-6886889</p>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
-                    <div class="feature-box p-4 rounded-0 shadow-sm bg-white h-100">
-                        <i class="bi bi-credit-card-2-front display-5 text-warning mb-3"></i>
-                        <h5 class="fw-bold">Payment Methods</h5>
-                        <p class="text-muted small mb-0">Cash on Delivery (COD) available.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mobile View Carousel -->
-            <div id="featureCarousel" class="carousel slide d-md-none" data-bs-ride="carousel">
-                <div class="carousel-inner">
-
-                    <div class="carousel-item active text-center">
-                        <div class="feature-box p-4 rounded-0 shadow-sm bg-white">
-                            <i class="bi bi-truck display-5 text-primary mb-3"></i>
-                            <h5 class="fw-bold">Free Shipping</h5>
-                            <p class="text-muted small mb-0">Free nationwide delivery on orders above Rs. 2000.</p>
-                        </div>
-                    </div>
-
-                    <div class="carousel-item text-center">
-                        <div class="feature-box p-4 rounded-0 shadow-sm bg-white">
-                            <i class="bi bi-headset display-5 text-success mb-3"></i>
-                            <h5 class="fw-bold">Support</h5>
-                            <p class="text-muted small mb-0">Contact us 09:00 - 18:00 PKT (Mon–Sat) <br> +92336-6886889</p>
-                        </div>
-                    </div>
-
-                    <div class="carousel-item text-center">
-                        <div class="feature-box p-4 rounded-0 shadow-sm bg-white">
-                            <i class="bi bi-credit-card-2-front display-5 text-warning mb-3"></i>
-                            <h5 class="fw-bold">Payment Methods</h5>
-                            <p class="text-muted small mb-0">Cash on Delivery (COD) available.</p>
-                        </div>
-                    </div>
-
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#featureCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon bg-dark rounded-circle p-2"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#featureCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon bg-dark rounded-circle p-2"></span>
-                </button>
-            </div>
-
-        </div>
-    </div>
-
-    <script>
-        AOS.init({
-            duration: 800,
-            once: true
-        });
-    </script>
-
-    <style>
-        .feature-box {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .feature-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .carousel-control-prev-icon,
-        .carousel-control-next-icon {
-            background-size: 60%;
-        }
-    </style>
-
-
 @endsection

@@ -33,7 +33,22 @@
     }
 </style>
 
+<style>
+    .breadcrumb {
+        background: transparent;
+        margin-bottom: 1rem;
+        font-size: 15px;
+    }
+
+    .breadcrumb-item+.breadcrumb-item::before {
+        content: "›";
+        color: #6c757d;
+    }
+</style>
+
 <body>
+
+
     <style>
         .loader-wrapper {
             position: fixed;
@@ -244,6 +259,156 @@
             </div>
         </nav>
 
+
+
+        {{-- //categories --}}
+        <div class="d-none d-lg-block d-xl-block d-md-block">
+            <div class="p-2 bg-light d-flex justify-content-center gap-5 position-relative">
+
+                {{-- 🔹 Add All Products link at the start --}}
+                <div>
+                    <a href="{{ route('products.all') }}" class="category-link">
+                        All Products
+                    </a>
+                </div>
+
+                {{-- 🔹 Loop through main categories --}}
+                @foreach (getCategories() as $category)
+                    <div class="dropdown">
+                        <a href="{{ url('category/' . $category->id) }}" class="category-link">
+                            {{ $category->name }}
+                        </a>
+
+                        {{-- Subcategories --}}
+                        @if ($category->children->count() > 0)
+                            <ul class="dropdown-menu p-2">
+                                @foreach ($category->children as $subcategory)
+                                    <li class="dropdown-submenu position-relative">
+                                        <a class="dropdown-item d-flex justify-content-between align-items-center"
+                                            href="{{ url('category/' . $subcategory->id) }}">
+                                            <span>{{ $subcategory->name }}</span>
+                                            @if ($subcategory->children->count() > 0)
+                                                <span class="submenu-arrow">›</span>
+                                            @endif
+                                        </a>
+
+                                        {{-- Sub-subcategories --}}
+                                        @if ($subcategory->children->count() > 0)
+                                            <ul class="dropdown-menu p-2 sub-submenu">
+                                                @foreach ($subcategory->children as $subsubcategory)
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                            href="{{ url('category/' . $subsubcategory->id) }}">
+                                                            {{ $subsubcategory->name }}
+                                                        </a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+
+
+        <style>
+            /* ===== GENERAL STYLING ===== */
+            .category-link {
+                text-decoration: none;
+                color: #000;
+                font-weight: 600;
+                cursor: pointer;
+                padding: 8px 12px;
+                display: inline-block;
+                transition: color 0.2s ease;
+            }
+
+            .category-link:hover {
+                color: #007bff;
+            }
+
+            /* ===== DROPDOWN CORE BEHAVIOR ===== */
+            .dropdown:hover>.dropdown-menu {
+                display: block;
+            }
+
+            .dropdown-submenu:hover>.dropdown-menu {
+                display: flex;
+            }
+
+            .dropdown-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                min-width: 220px;
+                background: #fff;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+                border-radius: 6px;
+                z-index: 1000;
+                padding: 8px 0;
+                flex-direction: column;
+                flex-wrap: wrap;
+                /* makes long lists wrap instead of overflow */
+                white-space: normal !important;
+            }
+
+            .dropdown-item {
+                cursor: pointer;
+                padding: 6px 12px;
+                white-space: normal;
+                word-break: break-word;
+                transition: background-color 0.2s;
+            }
+
+            .dropdown-item:hover {
+                background-color: #f8f9fa;
+            }
+
+            /* ===== REMOVE DEFAULT BOOTSTRAP TOGGLE ARROW ===== */
+            .dropdown-toggle::after {
+                display: none !important;
+            }
+
+            /* ===== SUB-SUBMENU OPENING TO RIGHT ===== */
+            .dropdown-submenu>.dropdown-menu {
+                top: 0;
+                left: 100%;
+                margin-left: 2px;
+                min-width: 220px;
+            }
+
+            /* ===== ARROW FOR SUBCATEGORIES WITH CHILDREN ===== */
+            .submenu-arrow {
+                font-size: 14px;
+                color: #888;
+                transition: transform 0.2s ease, color 0.2s ease;
+            }
+
+            .dropdown-submenu:hover>a>.submenu-arrow {
+                transform: translateX(2px);
+                color: #007bff;
+            }
+
+            /* ===== OPTIONAL STYLING FOR RESPONSIVE WRAP ===== */
+            @media (max-width: 768px) {
+
+                .dropdown-menu,
+                .sub-submenu {
+                    position: static;
+                    box-shadow: none;
+                    flex-wrap: wrap;
+                }
+            }
+        </style>
+
+
+
         <main>
             @if (session('success'))
                 <div class="alert alert-success text-center">{{ session('success') }}</div>
@@ -327,8 +492,9 @@
                         <div class="mb-3">
                             <label for="email" class="custom-font my-2">Your Email Address <span
                                     class="text-danger">*</span></label>
-                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                            <input id="email" type="email"
+                                class="form-control @error('email') is-invalid @enderror" name="email"
+                                value="{{ old('email') }}" required autocomplete="email" autofocus>
                             @error('email')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
@@ -454,6 +620,13 @@
                     <a href="{{ route('welcome') }}"
                         class="text-decoration-none d-block {{ request()->routeIs('welcome') ? 'text-white' : 'text-dark' }}">
                         Home
+                    </a>
+                </li>
+
+                <li class="list-group-item {{ request()->routeIs('products.all') ? 'active' : '' }}">
+                    <a href="{{ route('products.all') }}"
+                        class="text-decoration-none d-block {{ request()->routeIs('products.all') ? 'text-white' : 'text-dark' }}">
+                        All Products
                     </a>
                 </li>
 
@@ -646,7 +819,7 @@
             Developed by
             <a href="https://wa.me/923366886889" target="_blank"
                 class="text-success text-decoration-none fw-semibold">
-                 JH Developers
+                JH Developers
             </a>
         </div>
     </footer>

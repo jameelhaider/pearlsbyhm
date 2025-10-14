@@ -36,3 +36,14 @@ if (!function_exists('getCartItemCount')) {
         return 0;
     }
 }
+
+
+if (!function_exists('getCategories')) {
+    function getCategories()
+    {
+        return \App\Models\Category::with('children.children')
+            ->whereNull('parent_id')
+            ->orderBy('name')
+            ->get();
+    }
+}
