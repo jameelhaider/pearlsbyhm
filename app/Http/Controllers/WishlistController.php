@@ -51,6 +51,7 @@ class WishlistController extends Controller
                 'products.image as image',
                 'products.hover_image as hover_image',
                 'products.name as name',
+                'products.url as url',
                 'products.price as price',
                 'products.actual_price as actual_price',
                 'products.id as product_id',

@@ -143,6 +143,37 @@
                                             @enderror
                                         </div>
                                     </div>
+                                    {{-- Email --}}
+                                    @if (Auth::check())
+                                        <div class="row mt-1">
+                                            <div class="col-12 mb-3">
+                                                <label for="email" class="custom-font my-1">Email <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" name="email" readonly
+                                                    placeholder="Your Email Address" value="{{ Auth::user()->email }}"
+                                                    class="form-control @error('email') is-invalid @enderror">
+                                                @error('email')
+                                                    <span class="invalid-feedback"
+                                                        role="alert"><strong>{{ $message }}</strong></span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="row mt-1">
+                                            <div class="col-12 mb-3">
+                                                <label for="email" class="custom-font my-1">Email <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text" name="email" placeholder="Your Email Address"
+                                                    value="{{ old('email') }}"
+                                                    class="form-control @error('email') is-invalid @enderror">
+                                                @error('email')
+                                                    <span class="invalid-feedback"
+                                                        role="alert"><strong>{{ $message }}</strong></span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    @endif
+
                                     {{-- Address --}}
                                     <div class="row mt-1">
                                         <div class="col-12 mb-3">
@@ -201,15 +232,44 @@
                                         <div class="col-12 mb-3">
                                             <label for="phone" class="custom-font my-1">Phone <span
                                                     class="text-danger">*</span></label>
-                                            <input type="text" name="phone" placeholder="0300-0000000"
-                                                value="{{ old('phone') }}" data-inputmask="'mask': '0399-9999999'"
-                                                maxlength="12" class="form-control @error('phone') is-invalid @enderror">
+                                            <input type="text" id="phone" name="phone"
+                                                placeholder="0300-0000000" value="{{ old('phone') }}" maxlength="12"
+                                                class="form-control @error('phone') is-invalid @enderror">
                                             @error('phone')
-                                                <span class="invalid-feedback"
-                                                    role="alert"><strong>{{ $message }}</strong></span>
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
                                             @enderror
                                         </div>
                                     </div>
+
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function() {
+                                            const phoneInput = document.getElementById('phone');
+                                            if (!phoneInput.value) {
+                                                phoneInput.value = '03';
+                                            }
+                                            phoneInput.addEventListener('keydown', function(e) {
+                                                if ((phoneInput.selectionStart <= 2 && (e.key === 'Backspace' || e.key === 'Delete'))) {
+                                                    e.preventDefault();
+                                                }
+                                            });
+                                            phoneInput.addEventListener('input', function(e) {
+                                                let value = e.target.value.replace(/\D/g, '');
+                                                if (!value.startsWith('03')) {
+                                                    value = '03' + value.replace(/^0+/, '');
+                                                }
+                                                value = value.slice(0, 11);
+                                                let formatted = value;
+                                                if (value.length > 4) {
+                                                    formatted = value.slice(0, 4) + '-' + value.slice(4);
+                                                }
+
+                                                e.target.value = formatted;
+                                            });
+                                        });
+                                    </script>
+
 
                                     @if (Auth::check())
                                         <div class="row mb-3">
@@ -404,10 +464,4 @@
     </div>
 
 
-    {{-- mask the field --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
-    <script>
-        $(":input").inputmask();
-    </script>
 @endsection

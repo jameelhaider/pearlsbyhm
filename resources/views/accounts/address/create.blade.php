@@ -10,6 +10,8 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item"><a href="{{ route('accounts.index') }}">Accounts</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('address.index') }}">Addresses</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
                     @if ($address->id)
                         Edit Address
@@ -56,12 +58,45 @@
                         <div class="col-lg-4 col-md-12 col-12 col-sm-12">
                             <label class="custom-font my-2">Phone <span class="text-danger">*</span></label>
                             <input type="text" name="phone" value="{{ old('phone', $address->phone) }}"
-                                placeholder="0300-0000000" data-inputmask="'mask': '0399-9999999'" maxlength="12"
-                                class="form-control @error('phone') is-invalid @enderror">
+                                placeholder="0300-0000000" maxlength="12"
+                                class="form-control @error('phone') is-invalid @enderror" id="phone">
                             @error('phone')
                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                             @enderror
                         </div>
+
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                const phoneInput = document.getElementById('phone');
+                                if (!phoneInput.value) {
+                                    phoneInput.value = '03';
+                                }
+                                phoneInput.addEventListener('focus', function() {
+                                    if (phoneInput.value === '') {
+                                        phoneInput.value = '03';
+                                    }
+                                });
+                                phoneInput.addEventListener('input', function(e) {
+                                    let value = e.target.value.replace(/\D/g, '');
+                                    if (!value.startsWith('03')) {
+                                        value = '03' + value.replace(/^0+/, '');
+                                    }
+                                    value = value.slice(0, 11);
+                                    let formatted = value;
+                                    if (value.length > 4) {
+                                        formatted = value.slice(0, 4) + '-' + value.slice(4);
+                                    }
+                                    e.target.value = formatted;
+                                });
+                                phoneInput.addEventListener('keydown', function(e) {
+                                    if ((phoneInput.selectionStart <= 2 && (e.key === 'Backspace' || e.key === 'Delete'))) {
+                                        e.preventDefault();
+                                    }
+                                });
+                            });
+                        </script>
+
+
                     </div>
 
                     <div class="row mt-2">
@@ -124,10 +159,4 @@
         </div>
     </div>
 
-    {{-- mask the field --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
-    <script>
-        $(":input").inputmask();
-    </script>
 @endsection

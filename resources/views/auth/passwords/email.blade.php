@@ -5,6 +5,9 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
+                @if (Auth::check())
+  <li class="breadcrumb-item"><a href="{{ route('accounts.index') }}">Accounts</a></li>
+                @endif
                 <li class="breadcrumb-item active" aria-current="page">Forgot Password</li>
             </ol>
         </nav>

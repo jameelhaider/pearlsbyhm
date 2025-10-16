@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ProductsController extends Controller
 {
@@ -24,11 +25,11 @@ class ProductsController extends Controller
     }
 
 
-   public function allproducts()
-{
-    $products = Product::latest()->paginate(50);
-    return view('products.index', compact('products'));
-}
+    public function allproducts()
+    {
+        $products = Product::latest()->paginate(50);
+        return view('products.index', compact('products'));
+    }
 
 
 
@@ -88,12 +89,16 @@ class ProductsController extends Controller
         if ($request->hasFile('hover_image')) {
             $product->hover_image = CommonController::imgUpload($request->hover_image, 'Products Hover Images');
         }
+        $slug = Str::slug($request->name);
+        $url = $slug . '-r' . rand(1000, 9999) . '-t' . time();
+        $product->url = $url;
         $product->name = $request->name;
         $product->description = $request->description;
         $product->price = $request->price;
         $product->actual_price = $request->actual_price;
         $product->category_id = $request->category_id;
         $product->save();
+
 
 
         if ($request->hasFile('images')) {
@@ -117,7 +122,6 @@ class ProductsController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::findOrFail($id);
-
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:2000',
@@ -127,33 +131,32 @@ class ProductsController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'hover_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'images' => 'nullable|array',
-            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
         ], [
             'category_id.required' => 'Please select a category.',
             'category_id.exists' => 'Selected category is invalid.',
             'price.lte' => 'Sale price cannot exceed actual price.',
         ]);
-
-        // Single image upload
         if ($request->hasFile('image')) {
             $previousImagePath = $product->image;
             $product->image = CommonController::imgUpload($request->image, 'Products Images', $previousImagePath);
         }
-
-        // Hover image upload
         if ($request->hasFile('hover_image')) {
             $previousImagePath = $product->hover_image;
             $product->hover_image = CommonController::imgUpload($request->hover_image, 'Products Hover Images', $previousImagePath);
         }
-
-        // Update basic info
-        $product->update([
+        $data = [
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
             'actual_price' => $request->actual_price,
             'category_id' => $request->category_id,
-        ]);
+        ];
+        if ($request->name !== $product->name) {
+            $slug = Str::slug($request->name);
+            $data['url'] = $slug . '-r' . rand(1000, 9999) . '-t' . time();
+        }
+        $product->update($data);
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $img) {
                 $uploadedPath = CommonController::imgUpload($img, 'Product Multiple Images');
@@ -163,7 +166,6 @@ class ProductsController extends Controller
                 ]);
             }
         }
-
         return redirect()
             ->route('admin.product.index')
             ->with('success', 'Product updated successfully.');
@@ -185,11 +187,14 @@ class ProductsController extends Controller
         }
     }
 
-    public function productdetails($id)
+    public function productdetails($url)
     {
         $product = DB::table('products')
-            ->where('id', $id)
+            ->where('url', $url)
             ->first();
+        if (!$product) {
+            return redirect()->route('welcome');
+        }
         return view('products.details', compact('product'));
     }
 }

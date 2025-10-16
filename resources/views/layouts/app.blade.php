@@ -13,6 +13,10 @@
 </head>
 
 <style>
+    * {
+        font-family: 'Arimo', sans-serif !important;
+    }
+
     .custom-font {
         font-family: Arial, sans-serif;
         letter-spacing: 1px;
@@ -264,41 +268,33 @@
         {{-- //categories --}}
         <div class="d-none d-lg-block d-xl-block d-md-block">
             <div class="p-2 bg-light d-flex justify-content-center gap-5 position-relative">
-
-                {{-- 🔹 Add All Products link at the start --}}
                 <div>
                     <a href="{{ route('products.all') }}" class="category-link">
                         All Products
                     </a>
                 </div>
-
-                {{-- 🔹 Loop through main categories --}}
                 @foreach (getCategories() as $category)
                     <div class="dropdown">
-                        <a href="{{ url('category/' . $category->id) }}" class="category-link">
+                        <a href="{{ url('category/' . $category->url) }}" class="category-link">
                             {{ $category->name }}
                         </a>
-
-                        {{-- Subcategories --}}
                         @if ($category->children->count() > 0)
                             <ul class="dropdown-menu p-2">
                                 @foreach ($category->children as $subcategory)
                                     <li class="dropdown-submenu position-relative">
                                         <a class="dropdown-item d-flex justify-content-between align-items-center"
-                                            href="{{ url('category/' . $subcategory->id) }}">
+                                            href="{{ url('category/' . $subcategory->url) }}">
                                             <span>{{ $subcategory->name }}</span>
                                             @if ($subcategory->children->count() > 0)
                                                 <span class="submenu-arrow">›</span>
                                             @endif
                                         </a>
-
-                                        {{-- Sub-subcategories --}}
                                         @if ($subcategory->children->count() > 0)
                                             <ul class="dropdown-menu p-2 sub-submenu">
                                                 @foreach ($subcategory->children as $subsubcategory)
                                                     <li>
                                                         <a class="dropdown-item"
-                                                            href="{{ url('category/' . $subsubcategory->id) }}">
+                                                            href="{{ url('category/' . $subsubcategory->url) }}">
                                                             {{ $subsubcategory->name }}
                                                         </a>
                                                     </li>
@@ -622,11 +618,28 @@
                         Home
                     </a>
                 </li>
+                <li class="list-group-item {{ request()->routeIs('cart.index') ? 'active' : '' }}">
+                    <a href="{{ route('cart.index') }}"
+                        class="text-decoration-none d-block {{ request()->routeIs('cart.index') ? 'text-white' : 'text-dark' }}">
+                        My Cart
+                        <span
+                            class="badge float-end rounded-0 {{ request()->routeIs('cart.index') ? 'bg-white text-dark' : 'bg-dark text-white' }}">
+                            {{ getCartItemCount() }}
+                        </span>
+                    </a>
+                </li>
 
                 <li class="list-group-item {{ request()->routeIs('products.all') ? 'active' : '' }}">
                     <a href="{{ route('products.all') }}"
                         class="text-decoration-none d-block {{ request()->routeIs('products.all') ? 'text-white' : 'text-dark' }}">
                         All Products
+                    </a>
+                </li>
+
+                 <li class="list-group-item {{ request()->routeIs('shop.category') ? 'active' : '' }}">
+                    <a href="{{ route('shop.category') }}"
+                        class="text-decoration-none d-block {{ request()->routeIs('shop.category') ? 'text-white' : 'text-dark' }}">
+                        Shop By Category
                     </a>
                 </li>
 
@@ -644,16 +657,7 @@
                     </a>
                 </li>
 
-                <li class="list-group-item {{ request()->routeIs('cart.index') ? 'active' : '' }}">
-                    <a href="{{ route('cart.index') }}"
-                        class="text-decoration-none d-block {{ request()->routeIs('cart.index') ? 'text-white' : 'text-dark' }}">
-                        My Cart
-                        <span
-                            class="badge float-end rounded-0 {{ request()->routeIs('cart.index') ? 'bg-white text-dark' : 'bg-dark text-white' }}">
-                            {{ getCartItemCount() }}
-                        </span>
-                    </a>
-                </li>
+
 
                 @guest
                     <li class="list-group-item {{ request()->routeIs('login') ? 'active' : '' }}">

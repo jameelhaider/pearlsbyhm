@@ -8,6 +8,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb small mb-3">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
+                 <li class="breadcrumb-item"><a href="{{ route('accounts.index') }}">Accounts</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Change Password</li>
             </ol>
         </nav>

@@ -435,6 +435,7 @@ class CheckoutController extends Controller
         $request->validate([
             'first_name' => ['required', 'string', 'max:255', 'regex:/^[A-Za-z\s]+$/'],
             'last_name'  => ['required', 'string', 'max:255', 'regex:/^[A-Za-z\s]+$/'],
+            'email'      => ['required', 'string', 'email', 'max:255'],
             'address'    => ['required', 'string', 'max:500'],
             'city'       => ['required', 'string', 'max:255', 'regex:/^[A-Za-z\s]+$/'],
             'phone'      => ['required', 'regex:/^03[0-9]{2}-[0-9]{7}$/'],
@@ -446,8 +447,11 @@ class CheckoutController extends Controller
             'city.regex'       => 'City name can only contain letters and spaces.',
             'phone.regex'      => 'Phone number must be in the format 03XX-XXXXXXX (e.g., 0300-0000000).',
             'postal_code.regex' => 'Postal code must be a 5-digit number.',
+            'email.required'   => 'Email address is required.',
+            'email.email'      => 'Please enter a valid email address.',
         ]);
     }
+
 
     private function getCart($userId, $guestId)
     {
@@ -486,6 +490,7 @@ class CheckoutController extends Controller
             'postal_code'    => $request->postal_code ?? null,
             'landmark'       => $request->landmark ?? null,
             'subtotal'       => $subtotal,
+            'email'       => $request->email,
             'shipping'       => $shipping,
             'total'          => $subtotal + $shipping,
             'status'         => 'Pending',
@@ -509,6 +514,7 @@ class CheckoutController extends Controller
             'phone'          => $address->phone,
             'postal_code'    => $address->postal_code,
             'landmark'       => $address->landmark,
+            'email'       => Auth::user()->email,
             'subtotal'       => $subtotal,
             'shipping'       => $shipping,
             'total'          => $subtotal + $shipping,

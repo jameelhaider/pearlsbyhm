@@ -7,6 +7,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
+                 <li class="breadcrumb-item"><a href="{{ route('accounts.index') }}">Accounts</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Addresses</li>
             </ol>
         </nav>
@@ -45,7 +46,7 @@
                                 </p>
 
                                 <div class="d-flex justify-content-between align-items-center mt-3">
-                                    <a href="{{ route('address.edit', ['id' => $address->id]) }}"
+                                    <a href="{{ route('address.edit', ['url' => $address->url]) }}"
                                         class="btn-outline-black nav-link px-3 py-1 rounded-0">EDIT</a>
 
                                     <form action="{{ route('address.delete', ['id' => $address->id]) }}" method="post"

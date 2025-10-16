@@ -14,6 +14,7 @@ class Product extends Model
         'image',
         'hover_image',
         'price',
+        'url',
         'actual_price',
         'description',
         'category_id',

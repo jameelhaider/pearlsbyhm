@@ -5,7 +5,8 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Orders</li>
+                <li class="breadcrumb-item"><a href="{{ route('accounts.index') }}">Accounts</a></li>
+                <li class="breadcrumb-item active" aria-current="page">My Orders</li>
             </ol>
         </nav>
 
@@ -68,7 +69,7 @@
 
                                 {{-- Actions --}}
                                 <div class="text-end mt-2">
-                                    <a href="#" class="btn-outline-black nav-link px-3 py-1 rounded-0 small">
+                                    <a href="{{ route('myorders.details',['id'=>$order->id]) }}" class="btn-outline-black nav-link px-3 py-1 rounded-0 small">
                                         VIEW DETAILS
                                     </a>
                                 </div>

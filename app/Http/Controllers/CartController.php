@@ -15,12 +15,12 @@ class CartController extends Controller
     {
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
+            'qty' => 'required|integer|min:1',
         ]);
-
         $productId = $request->product_id;
+        $qty = (int) $request->qty;
         $userId = Auth::id();
         $guestId = getOrCreateGuestId();
-
         if ($userId) {
             $cart = Cart::firstOrCreate(['user_id' => $userId]);
         } else {
@@ -29,20 +29,19 @@ class CartController extends Controller
         $cartItem = CartItem::where('cart_id', $cart->id)
             ->where('product_id', $productId)
             ->first();
-
         if ($cartItem) {
-            $cartItem->qty += 1;
+            $cartItem->qty += $qty;
             $cartItem->save();
         } else {
             $cartItem = new CartItem();
             $cartItem->cart_id = $cart->id;
             $cartItem->product_id = $productId;
-            $cartItem->qty = 1;
+            $cartItem->qty = $qty;
             $cartItem->save();
         }
-
-        return redirect()->back()->with('success', 'Item added to cart');
+        return redirect()->back()->with('success', 'Item added to cart successfully.');
     }
+
 
 
     public function index()

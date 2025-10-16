@@ -18,8 +18,30 @@ class AccountsController extends Controller
     public function myorders()
     {
         $myorders = DB::table('orders')->where('user_id', Auth::id())->get();
-        return view('accounts.myorders', compact('myorders'));
+        return view('accounts.orders.myorders', compact('myorders'));
     }
+
+    public function myorderdetail($id)
+    {
+        $order = DB::table('orders')->where('id', $id)->first();
+        if (!$order) {
+            return redirect()->route('myorders.index')->with('error', 'Order not found.');
+        }
+        if ($order->user_id != auth()->id()) {
+            return redirect()->route('myorders.index')->with('error', 'Unauthorized action.');
+        }
+        $order_items = DB::table('order_items')
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            ->select(
+                'order_items.*',
+                'products.image as product_image',
+            )
+            ->where('order_items.order_id', $order->id)
+            ->get();
+        return view('accounts.orders.details', compact('order', 'order_items'));
+    }
+
+
     public function myaddresses()
     {
         $myaddresses = DB::table('addresses')->where('user_id', Auth::id())->get();
@@ -30,9 +52,9 @@ class AccountsController extends Controller
         $address = new Address();
         return view('accounts.address.create', compact('address'));
     }
-    public function editaddress($id)
+    public function editaddress($url)
     {
-        $address = Address::find($id);
+        $address = DB::table('addresses')->where('url', $url)->first();
         if (!$address) {
             return redirect()->route('address.index')
                 ->with('error', 'Address not found!');
@@ -45,9 +67,6 @@ class AccountsController extends Controller
                 ->with('error', 'Unauthorized action!');
         }
     }
-
-
-
     public function saveaddress(Request $request)
     {
         $request->validate([

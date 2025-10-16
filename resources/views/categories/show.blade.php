@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @php
-    $title=$category->name .' - Pearls By HM';
+    $title = $category->name . ' - Pearls By HM';
 @endphp
 @section('title', $title)
 @section('content')
@@ -62,7 +62,7 @@
                 @foreach ($breadcrumbs as $crumb)
                     @if (!$loop->last)
                         <li class="breadcrumb-item">
-                            <a href="{{ route('category.show', $crumb->id) }}">{{ $crumb->name }}</a>
+                            <a href="{{ route('category.show', $crumb->url) }}">{{ $crumb->name }}</a>
                         </li>
                     @else
                         <li class="breadcrumb-item active" aria-current="page">{{ $crumb->name }}</li>
@@ -89,7 +89,7 @@
             <div class="row justify-content-around g-2 mt-2">
                 @foreach ($products as $product)
                     <div class="col-lg-3 col-12 col-md-4 col-sm-6">
-                        <a href="{{ route('prduct.details', ['id' => $product->id]) }}" class="nav-link">
+                        <a href="{{ route('prduct.details', ['url' => $product->url]) }}" class="nav-link">
                             <div class="card rounded-0 product-card">
                                 <div class="image-wrapper">
                                     <img class="main-image img-fluid" src="{{ asset($product->image) }}"
@@ -111,6 +111,7 @@
                                     <form action="{{ route('cart.add') }}" method="POST" class="me-1 w-100">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="qty" value="1">
                                         <button type="submit" class="btn-solid-black2 w-100">Add to Cart</button>
                                     </form>
 
@@ -128,7 +129,7 @@
             </div>
 
             <div class="mt-4 d-flex justify-content-center">
-             {{ $products->appends(request()->query())->links('pagination::bootstrap-5') }}
+                {{ $products->appends(request()->query())->links('pagination::bootstrap-5') }}
             </div>
 
             <style>

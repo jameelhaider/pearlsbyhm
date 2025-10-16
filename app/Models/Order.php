@@ -18,6 +18,7 @@ class Order extends Model
         'subtotal',
         'shipping',
         'total',
+        'email',
         'status',
         'total_products',
         'total_items',

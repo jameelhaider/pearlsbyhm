@@ -41,7 +41,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
 
 
-         Route::group(['prefix' => 'categories'], function () {
+        Route::group(['prefix' => 'categories'], function () {
             Route::post('/submit', [CategoryController::class, 'submit'])->name("category.submit");
             Route::get('/create', [CategoryController::class, 'create'])->name("category.create");
             Route::get('/edit/{id}', [CategoryController::class, 'edit'])->name("category.edit");
@@ -49,7 +49,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/update/{id}', [CategoryController::class, 'update'])->name("category.update");
             Route::get('/', [CategoryController::class, 'index'])->name("category.index");
         });
-
     });
 });
 
@@ -58,7 +57,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 Route::get('/', function () {
     $products = DB::table('products')
-        ->latest('created_at')  
+        ->latest('created_at')
         ->take(16)
         ->get();
 
@@ -66,10 +65,10 @@ Route::get('/', function () {
 })->name('welcome');
 
 
-Route::get('/category/{id}', [CategoryController::class, 'show'])->name('category.show');
+Route::get('/category/{url}', [CategoryController::class, 'show'])->name('category.show');
 Route::get('/allproducts', [ProductsController::class, 'allproducts'])->name('products.all');
 
-Route::get('/product/details/{id}', [ProductsController::class, 'productdetails'])->name('prduct.details');
+Route::get('/product/details/{url}', [ProductsController::class, 'productdetails'])->name('prduct.details');
 
 Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -87,15 +86,17 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
 
 Route::get('/track-my-order', [CheckoutController::class, 'trackmyorder'])->name('track.order');
+Route::get('/shop-by-category', [CategoryController::class, 'shopbycategory'])->name('shop.category');
 
 
 
 Route::middleware(['auth'])->prefix('accounts')->group(function () {
     Route::get('/', [AccountsController::class, 'index'])->name('accounts.index');
     Route::get('/my-orders', [AccountsController::class, 'myorders'])->name('myorders.index');
+    Route::get('/my-orders/details/{id}', [AccountsController::class, 'myorderdetail'])->name('myorders.details');
     Route::get('/addresses', [AccountsController::class, 'myaddresses'])->name('address.index');
     Route::get('/addresses/create', [AccountsController::class, 'createaddress'])->name('address.create');
-    Route::get('/addresses/edit/{id}', [AccountsController::class, 'editaddress'])->name('address.edit');
+    Route::get('/addresses/edit/{url}', [AccountsController::class, 'editaddress'])->name('address.edit');
 
     Route::post('/addresses/save', [AccountsController::class, 'saveaddress'])->name('address.save');
     Route::post('/addresses/update/{id}', [AccountsController::class, 'updateaddress'])->name('address.update');
