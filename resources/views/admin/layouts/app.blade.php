@@ -176,6 +176,21 @@
                         </a>
                     </li>
 
+
+                       <li
+                        class="menu-header small text-uppercase fw-bold {{ Request::is('admin/slides') || Request::is('admin/slides/create') ? '' : 'text-dark' }}">
+                        <span class="menu-header-text">Slides</span>
+                    </li>
+                    <li
+                        class="menu-item {{ Request::is('admin/slides') || Request::is('admin/slides/create') ? 'active' : '' }}">
+                        <a href="{{ url('admin/slides') }}"
+                            class="menu-link {{ Request::is('admin/slides') || Request::is('admin/slides/create') ? '' : 'text-dark' }} d-flex align-items-center">
+                            <i class="menu-icon tf-icons bx bx-mobile-alt"></i>
+                            <div data-i18n="Support" class="flex-grow-1">Slides</div>
+                        </a>
+                    </li>
+
+
                      <li
                         class="menu-header small text-uppercase fw-bold {{ Request::is('admin/products') || Request::is('admin/products/create') ? '' : 'text-dark' }}">
                         <span class="menu-header-text">Products</span>

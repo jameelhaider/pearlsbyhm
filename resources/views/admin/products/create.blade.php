@@ -19,7 +19,7 @@
                         {{ $product->id != null ? 'Edit Product' : 'Add New Product' }}</h3>
 
                     <h5 class="mt-1 d-block d-md-none d-lg-none" style="font-family:cursive">
-                        {{ $product->id != null ? 'Edit Account' : 'Add New Product' }}</h5>
+                        {{ $product->id != null ? 'Edit Product' : 'Add New Product' }}</h5>
                 </div>
             </div>
         </div>

@@ -53,6 +53,11 @@
 
 
     <div class="container-fluid">
+        <h3 class="text-center mt-4 fw-bold" style="font-family: Arial, sans-serif">Latest Products</h3>
+        <div class="text-center">
+            <a href="{{ route('products.all') }}">View All Products</a>
+        </div>
+
         <div class="row justify-content-around g-2 mt-2">
             @foreach ($products as $product)
                 <div class="col-lg-3 col-12 col-md-4 col-sm-6">

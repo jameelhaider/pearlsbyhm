@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\SlidesController;
 use App\Http\Controllers\WishlistController;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +50,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/update/{id}', [CategoryController::class, 'update'])->name("category.update");
             Route::get('/', [CategoryController::class, 'index'])->name("category.index");
         });
+
+         Route::group(['prefix' => 'slides'], function () {
+            Route::post('/submit', [SlidesController::class, 'submit'])->name("slide.submit");
+            Route::get('/create', [SlidesController::class, 'create'])->name("slide.create");
+            Route::get('/edit/{id}', [SlidesController::class, 'edit'])->name("slide.edit");
+            Route::get('/delete/{id}', [SlidesController::class, 'delete'])->name("slide.delete");
+            Route::post('/update/{id}', [SlidesController::class, 'update'])->name("slide.update");
+            Route::get('/', [SlidesController::class, 'index'])->name("slide.index");
+        });
+
+
     });
 });
 
@@ -86,6 +98,8 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
 
 Route::get('/track-my-order', [CheckoutController::class, 'trackmyorder'])->name('track.order');
+
+
 Route::get('/shop-by-category', [CategoryController::class, 'shopbycategory'])->name('shop.category');
 
 
@@ -93,7 +107,7 @@ Route::get('/shop-by-category', [CategoryController::class, 'shopbycategory'])->
 Route::middleware(['auth'])->prefix('accounts')->group(function () {
     Route::get('/', [AccountsController::class, 'index'])->name('accounts.index');
     Route::get('/my-orders', [AccountsController::class, 'myorders'])->name('myorders.index');
-    Route::get('/my-orders/details/{id}', [AccountsController::class, 'myorderdetail'])->name('myorders.details');
+    Route::get('/my-orders/details/{url}', [AccountsController::class, 'myorderdetail'])->name('myorders.details');
     Route::get('/addresses', [AccountsController::class, 'myaddresses'])->name('address.index');
     Route::get('/addresses/create', [AccountsController::class, 'createaddress'])->name('address.create');
     Route::get('/addresses/edit/{url}', [AccountsController::class, 'editaddress'])->name('address.edit');

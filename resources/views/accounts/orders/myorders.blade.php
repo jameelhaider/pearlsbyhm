@@ -23,7 +23,7 @@
                                 {{-- Header --}}
                                 <div class="d-flex justify-content-between align-items-center flex-wrap mb-2">
                                     <strong style="font-family: Arial, sans-serif;">
-                                        #{{ $order->id }} |
+                                        #{{ $order->tracking_id }} |
                                         {{ \Carbon\Carbon::parse($order->created_at)->format('d M y, h:i A') }}
                                     </strong>
 
@@ -69,7 +69,7 @@
 
                                 {{-- Actions --}}
                                 <div class="text-end mt-2">
-                                    <a href="{{ route('myorders.details',['id'=>$order->id]) }}" class="btn-outline-black nav-link px-3 py-1 rounded-0 small">
+                                    <a href="{{ route('myorders.details',['url'=>$order->url]) }}" class="btn-outline-black nav-link px-3 py-1 rounded-0 small">
                                         VIEW DETAILS
                                     </a>
                                 </div>

@@ -34,20 +34,6 @@ class ProductsController extends Controller
 
 
 
-    // public function create()
-    // {
-    //     $product = new Product();
-    //     return view("admin.products.create", compact('product'));
-    // }
-
-    // public function edit($id)
-    // {
-    //     $product = Product::find($id);
-    //     if (!$product)
-    //         return redirect()->back();
-    //     return view("admin.products.create", compact('product'));
-    // }
-
     public function create()
     {
         $product = new Product();

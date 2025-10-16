@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @php
-    $title = 'Order Details # ' . $order->id . ' - Pearls By HM';
+    $title = 'Order Details # ' . $order->tracking_id . ' - Pearls By HM';
 @endphp
 @section('title', $title)
 
@@ -57,13 +57,13 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('myorders.index') }}">My Orders</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Order #{{ $order->id }}</li>
+                <li class="breadcrumb-item active" aria-current="page">Order Details # {{ $order->tracking_id }}</li>
             </ol>
         </nav>
 
         {{-- Header --}}
         <div class="text-center">
-            <h4 class="fw-bold mb-2" style="letter-spacing: 1px;">Order Details #{{ $order->id }}</h4>
+            <h4 class="fw-bold mb-2" style="letter-spacing: 1px;">ORDER DETAILS # {{ $order->tracking_id }}</h4>
             <a href="{{ route('myorders.index') }}" class="btn-solid-black nav-link w-100">Back to Orders</a>
         </div>
 
@@ -136,7 +136,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>Product</th>
-                                    <th>Qty</th>
+                                    <th class="text-center">Qty</th>
                                     <th>Price</th>
                                     <th class="text-end">Total</th>
                                 </tr>
@@ -149,7 +149,7 @@
                                                 alt="{{ $item->name }}">
                                             <span>{{ $item->name ?? 'N/A' }}</span>
                                         </td>
-                                        <td>{{ $item->qty }}</td>
+                                        <td class="text-center">{{ $item->qty }}</td>
                                         <td>Rs. {{ number_format($item->price, 2) }}</td>
                                         <td class="text-end">Rs. {{ number_format($item->total, 2) }}</td>
                                     </tr>
@@ -163,15 +163,15 @@
                         <ul class="list-group list-group-flush small">
                             <li class="list-group-item px-0 d-flex justify-content-between">
                                 <strong>Subtotal:</strong>
-                                <span>Rs {{ number_format($order->subtotal, 2) }}</span>
+                                <span>Rs. {{ number_format($order->subtotal, 2) }}</span>
                             </li>
                             <li class="list-group-item px-0 d-flex justify-content-between">
                                 <strong>Shipping:</strong>
-                                <span>Rs {{ number_format($order->shipping, 2) }}</span>
+                                <span>Rs. {{ number_format($order->shipping, 2) }}</span>
                             </li>
                             <li class="list-group-item px-0 d-flex justify-content-between fw-bold border-top pt-2">
                                 <strong>Total Bill:</strong>
-                                <span>Rs {{ number_format($order->total, 2) }}</span>
+                                <span>Rs. {{ number_format($order->total, 2) }}</span>
                             </li>
                         </ul>
                     </div>

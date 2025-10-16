@@ -149,7 +149,7 @@
                                             <div class="col-12 mb-3">
                                                 <label for="email" class="custom-font my-1">Email <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" name="email" readonly
+                                                <input type="email" name="email" readonly
                                                     placeholder="Your Email Address" value="{{ Auth::user()->email }}"
                                                     class="form-control @error('email') is-invalid @enderror">
                                                 @error('email')
@@ -163,7 +163,7 @@
                                             <div class="col-12 mb-3">
                                                 <label for="email" class="custom-font my-1">Email <span
                                                         class="text-danger">*</span></label>
-                                                <input type="text" name="email" placeholder="Your Email Address"
+                                                <input type="email" name="email" placeholder="Your Email Address"
                                                     value="{{ old('email') }}"
                                                     class="form-control @error('email') is-invalid @enderror">
                                                 @error('email')

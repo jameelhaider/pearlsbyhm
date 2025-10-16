@@ -8,6 +8,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CheckoutController extends Controller
 {
@@ -401,11 +402,7 @@ class CheckoutController extends Controller
         $userId = Auth::id();
         $guestId = getOrCreateGuestId();
         $addresses = $userId ? DB::table('addresses')->where('user_id', $userId)->get() : collect();
-
-        // --- CASE 1: Auth user with saved addresses ---
         if ($userId && $addresses->count() > 0) {
-
-            // Using Different Address
             if ($request->address_method === 'Using Different Address') {
                 $this->validateAddress($request);
                 $order = $this->createOrderFromRequest($request, $userId, $guestId);
@@ -413,16 +410,12 @@ class CheckoutController extends Controller
                 $this->moveCartItemsToOrder($order, $userId, $guestId);
                 return redirect()->route('welcome')->with('success', 'Order placed successfully!');
             }
-
-            // Using Saved Address
             $request->validate(['selected_address' => 'required']);
             $selected = DB::table('addresses')->where('id', $request->selected_address)->first();
             $order = $this->createOrderFromAddress($selected, $userId, $guestId);
             $this->moveCartItemsToOrder($order, $userId, $guestId);
             return redirect()->route('welcome')->with('success', 'Order placed successfully!');
         }
-
-        // --- CASE 2: Guest or Auth user without saved addresses ---
         $this->validateAddress($request);
         $order = $this->createOrderFromRequest($request, $userId, $guestId);
         if ($request->save_for_later == 'on' && $userId) $this->saveAddress($request, $userId);
@@ -467,12 +460,9 @@ class CheckoutController extends Controller
             ->select('cart_items.qty', 'products.id as product_id', 'products.price', 'products.name')
             ->where('cart_items.cart_id', $cart->id)
             ->get();
-
         if ($items->isEmpty()) abort(redirect()->back()->with('error', 'Your cart is empty.'));
-
         $subtotal = $items->sum(fn($i) => $i->price * $i->qty);
         $shipping = $subtotal >= 2000 ? 0 : 260;
-
         return compact('cart', 'items', 'subtotal', 'shipping');
     }
 
@@ -492,6 +482,8 @@ class CheckoutController extends Controller
             'subtotal'       => $subtotal,
             'email'       => $request->email,
             'shipping'       => $shipping,
+            'tracking_id' => 'TRK-' . strtoupper(Str::random(6)),
+            'url'       => 'order' . '-r' . rand(1000, 9999) . '-t' . time(),
             'total'          => $subtotal + $shipping,
             'status'         => 'Pending',
             'total_products' => $items->count(),
@@ -516,6 +508,8 @@ class CheckoutController extends Controller
             'landmark'       => $address->landmark,
             'email'       => Auth::user()->email,
             'subtotal'       => $subtotal,
+            'tracking_id' => 'TRK-' . strtoupper(Str::random(6)),
+            'url'       => 'order' . '-r' . rand(1000, 9999) . '-t' . time(),
             'shipping'       => $shipping,
             'total'          => $subtotal + $shipping,
             'status'         => 'Pending',
@@ -560,8 +554,18 @@ class CheckoutController extends Controller
     }
 
 
-    public function trackmyorder()
-    {
-        return view('orders.trackmyorder');
+  public function trackmyorder(Request $request)
+{
+    $order = null;
+
+    if ($request->filled('tracking_id')) {
+        $order = DB::table('orders')
+            ->where('tracking_id', $request->tracking_id)
+            ->first();
     }
+
+    return view('orders.trackmyorder', compact('order'));
+}
+
+
 }

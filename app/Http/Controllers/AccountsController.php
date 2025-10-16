@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AccountsController extends Controller
 {
@@ -17,13 +18,14 @@ class AccountsController extends Controller
     }
     public function myorders()
     {
-        $myorders = DB::table('orders')->where('user_id', Auth::id())->get();
+        $myorders = DB::table('orders')->where('user_id', Auth::id())
+        ->orderBy('created_at','desc')->get();
         return view('accounts.orders.myorders', compact('myorders'));
     }
 
-    public function myorderdetail($id)
+    public function myorderdetail($url)
     {
-        $order = DB::table('orders')->where('id', $id)->first();
+        $order = DB::table('orders')->where('url', $url)->first();
         if (!$order) {
             return redirect()->route('myorders.index')->with('error', 'Order not found.');
         }
@@ -84,7 +86,10 @@ class AccountsController extends Controller
             'phone.regex'      => 'Phone number must be in the format 03XX-XXXXXXX (e.g., 0300-0000000).',
             'postal_code.regex' => 'Postal code must be a 5-digit number.',
         ]);
+
+
         $address = new Address();
+        $address->url = 'address'.'-r' . rand(1000, 9999) . '-t' . time();
         $address->first_name = $request->first_name;
         $address->last_name = $request->last_name;
         $address->phone = $request->phone;
@@ -120,6 +125,7 @@ class AccountsController extends Controller
         $address->phone = $request->phone;
         $address->address = $request->address;
         $address->city = $request->city;
+        $address->url = $address->url;
         $address->landmark = $request->landmark ?? null;
         $address->postal_code = $request->postal_code ?? null;
         $address->user_id = Auth::id();

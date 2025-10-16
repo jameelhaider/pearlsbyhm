@@ -22,5 +22,7 @@ class Order extends Model
         'status',
         'total_products',
         'total_items',
+        'tracking_id',
+        'url',
     ];
 }

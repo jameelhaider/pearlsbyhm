@@ -2,6 +2,7 @@
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Slide;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -45,5 +46,12 @@ if (!function_exists('getCategories')) {
             ->whereNull('parent_id')
             ->orderBy('name')
             ->get();
+    }
+}
+
+if (!function_exists('getslides')) {
+    function getslides()
+    {
+        return Slide::get();
     }
 }

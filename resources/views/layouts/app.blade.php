@@ -211,7 +211,7 @@
         </div>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{ url('/') }}">Pearls By HM</a>
+                <a class="navbar-brand" href="{{ url('/') }}"><img src="{{ asset('uploads/c2.png') }}" height="60px" width="70px" alt=""> <span style="font-size: 20px" class="fw-bold">Pearls By HM</span></a>
 
                 {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -235,13 +235,26 @@
                     <ul class="navbar-nav me-auto"></ul>
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link mt-2" style="font-size: 1.2rem;"
-                                href="{{ route('track.order') }}">{{ __('Track My Order') }}</a>
+                            <a class="nav-link mt-2 {{ Route::is('welcome') ? 'active text-dark' : '' }}"
+                                style="font-size: 1.2rem;" href="{{ route('welcome') }}">
+                                {{ __('Home') }}
+                            </a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link mt-2" style="font-size: 1.2rem;"
-                                href="{{ route('wishlist.index') }}">{{ __('Wish List') }}</a>
+                            <a class="nav-link mt-2 {{ Route::is('track.order') ? 'active text-dark' : '' }}"
+                                style="font-size: 1.2rem;" href="{{ route('track.order') }}">
+                                {{ __('Track My Order') }}
+                            </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link mt-2 {{ Route::is('wishlist.index') ? 'active text-dark' : '' }}"
+                                style="font-size: 1.2rem;" href="{{ route('wishlist.index') }}">
+                                {{ __('Wish List') }}
+                            </a>
+                        </li>
+
 
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-bs-toggle="offcanvas"
@@ -251,7 +264,8 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cart.index') }}">
+                            <a class="nav-link {{ Route::is('cart.index') ? 'active text-dark' : '' }}"
+                                href="{{ route('cart.index') }}">
                                 <i class="bi bi-cart" style="font-size: 1.7rem;"></i>
                                 <span class="badge bg-dark rounded-0">{{ getCartItemCount() }}</span>
                             </a>
@@ -413,7 +427,86 @@
                 <div class="alert alert-danger text-center">{{ session('error') }}</div>
             @endif
 
+
+
+
+
+
+
+            @if (Request::is('/') && getslides()->count() > 0)
+                <div class="carousel slide mt-1" id="slider" data-bs-ride="carousel">
+                    <ul class="carousel-indicators">
+                        @foreach (getslides() as $key => $slide)
+                            <li class="@if ($loop->first) active @endif"
+                                data-bs-slide-to="{{ $key }}" data-bs-target="#slider"></li>
+                        @endforeach
+                    </ul>
+                    <div class="carousel-inner carousel-fade">
+                        @foreach (getslides() as $slide)
+                            <div class="carousel-item @if ($loop->first) active @endif">
+                                @if ($slide->link)
+                                    <a href="{{ $slide->link }}" class="nav-link">
+                                        <img class="d-block w-100 img-fluid" src="{{ $slide->image }}"
+                                            alt="Slide Image">
+                                    </a>
+                                @else
+                                    <img class="d-block w-100 img-fluid" src="{{ $slide->image }}" alt="Slide Image">
+                                @endif
+
+
+
+
+                                @if ($slide->text || $slide->link)
+                                    <div class="carousel-caption">
+                                        @if ($slide->text)
+                                            <h5 class="text-white mb-2">{{ $slide->text }}</h5>
+                                        @endif
+
+
+                                    </div>
+                                @endif
+
+
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#slider">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                    <button class="carousel-control-prev" data-bs-slide="prev" data-bs-target="#slider">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                </div>
+            @endif
+
+            <style>
+                .carousel-item img {
+                    pointer-events: none;
+                    user-drag: none;
+                    -webkit-user-drag: none;
+                }
+            </style>
+
+            <script>
+                document.addEventListener('contextmenu', function(e) {
+                    if (e.target.tagName === 'IMG' && e.target.closest('.carousel-item')) {
+                        e.preventDefault();
+                    }
+                });
+            </script>
+
+
+
             @yield('content')
+
+
+
+
+
+
+
+
         </main>
     </div>
 
@@ -476,7 +569,8 @@
 
 
 
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
         </div>
 
         <div class="offcanvas-body p-0">
@@ -636,7 +730,7 @@
                     </a>
                 </li>
 
-                 <li class="list-group-item {{ request()->routeIs('shop.category') ? 'active' : '' }}">
+                <li class="list-group-item {{ request()->routeIs('shop.category') ? 'active' : '' }}">
                     <a href="{{ route('shop.category') }}"
                         class="text-decoration-none d-block {{ request()->routeIs('shop.category') ? 'text-white' : 'text-dark' }}">
                         Shop By Category
