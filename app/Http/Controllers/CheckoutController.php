@@ -48,11 +48,9 @@ class CheckoutController extends Controller
         });
         $shipping = $subtotal >= 2000 ? 0 : 260;
         $total = $subtotal + $shipping;
-
         $addresses = $userId
             ? DB::table('addresses')->where('user_id', $userId)->get()
             : collect();
-
         return view('checkout.index', compact('cartItems', 'subtotal', 'shipping', 'total', 'addresses'));
     }
 

@@ -84,7 +84,7 @@
             opacity: 0.9;
         }
     </style>
-    <div class="container-fluid px-5 py-4">
+    <div class="container-fluid px-1 py-1 px-md-5 py-md-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -99,9 +99,10 @@
                 <h2 class="text-dark fw-bold" style="font-family:Arial, sans-serif">Your cart is empty</h2>
                 <p class="text-secondary" style="font-family:Arial, sans-serif">Looks like you haven't added any items yet.
                 </p>
-                <a href="{{ route('welcome') }}" class="btn-outline-black2 w-50 nav-link mt-3">
+                <a href="{{ route('welcome') }}" class="btn-outline-black2 nav-link mt-3 w-100 w-lg-50">
                     CONTINUE SHOPPING
                 </a>
+
             </div>
         @else
             <div class="row">

@@ -5,7 +5,7 @@
 @section('content')
 
 
-    <div class="container px-5 py-4 mb-5">
+    <div class="container px-2 py-1 px-md-5 py-md-4 mb-5">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -380,15 +380,15 @@
                     <div class="row mt-4 p-2">
                         <div class="col-lg-12 p-3 border border-dark rounded-3">
                             <div class="row align-items-center">
-                                <div class="col-lg-6 col-4 col-sm-4 col-md-5">
+                                <div class="col-lg-6 col-5 col-sm-4 col-md-5">
                                     <h5 class="mb-0" style="font-family:Arial, sans-serif">
                                         <i class="bi bi-record-circle me-2"></i>
                                         Standard
                                     </h5>
                                 </div>
-                                <div class="col-lg-6 col-8 col-sm-8 col-md-7">
+                                <div class="col-lg-6 col-7 col-sm-8 col-md-7">
                                     <h5 class="float-end mb-0 text-success" style="font-family:Arial, sans-serif">
-                                        Cash On Delivery (COD)
+                                        Cash On Delivery
                                     </h5>
                                 </div>
                             </div>
