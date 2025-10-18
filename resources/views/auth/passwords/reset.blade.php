@@ -67,7 +67,7 @@
 
                     <div class="row mb-0">
                         <div class="col-lg-12">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn-outline-black w-100">
                                 Reset Password
                             </button>
                         </div>

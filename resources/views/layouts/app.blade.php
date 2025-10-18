@@ -614,7 +614,7 @@
                         @endif
                     </form>
                     <a class="btn-outline-black btn mt-3 w-100" href="{{ route('register') }}">
-                        Create Account
+                        CREATE ACCOUNT
                     </a>
                 </div>
             @else

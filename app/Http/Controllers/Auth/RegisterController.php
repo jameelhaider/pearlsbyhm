@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\WelcomeUserNotification;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
@@ -45,7 +47,6 @@ class RegisterController extends Controller
     protected function registered(Request $request, $user)
     {
         $guestId = $request->cookie('guest_id');
-
         if ($guestId) {
             $guestCart = DB::table('carts')->where('guest_id', $guestId)->first();
             if ($guestCart) {
@@ -105,5 +106,33 @@ class RegisterController extends Controller
                 }
             }
         }
+
+
+
+
+        try {
+            if (
+                config('mail.mailers.smtp.transport') &&
+                config('mail.from.address') &&
+                filter_var($user->email, FILTER_VALIDATE_EMAIL)
+            ) {
+                $password = $request->input('password');
+
+                if (!empty($password)) {
+                    $user->notify(
+                        (new \App\Notifications\WelcomeUserNotification(
+                            $user->email,
+                            $password
+                        ))
+                    );
+                }
+            }
+        } catch (\Throwable $e) {
+            Log::error('Failed to send Welcome Email: ' . $e->getMessage());
+        }
+
+
+
+        return redirect()->route('welcome')->with('success', 'Account Created! Now You Are Logged In.');
     }
 }

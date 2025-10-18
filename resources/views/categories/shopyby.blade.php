@@ -25,11 +25,11 @@
                             @if ($category->children->count() > 0)
                                 <i class="bi bi-chevron-right me-1 toggle-icon"></i>
                             @endif
-                            <a href="{{ url('category/' . $category->id) }}" class="fw-semibold text-dark text-decoration-none">
+                            <a href="{{ url('category/' . $category->url) }}" class="fw-semibold text-dark text-decoration-none">
                                 {{ $category->name }}
                             </a>
                         </div>
-                        <a href="{{ url('category/' . $category->id) }}" class="btn btn-outline-dark rounded-0">
+                        <a href="{{ url('category/' . $category->url) }}" class="btn btn-outline-dark rounded-0">
                             View Products
                         </a>
                     </div>
@@ -43,11 +43,11 @@
                                             @if ($subcategory->children->count() > 0)
                                                 <i class="bi bi-chevron-right me-1 toggle-icon"></i>
                                             @endif
-                                            <a href="{{ url('category/' . $subcategory->id) }}" class="text-dark text-decoration-none">
+                                            <a href="{{ url('category/' . $subcategory->url) }}" class="text-dark text-decoration-none">
                                                 {{ $subcategory->name }}
                                             </a>
                                         </div>
-                                        <a href="{{ url('category/' . $subcategory->id) }}" class="btn btn-outline-dark rounded-0">
+                                        <a href="{{ url('category/' . $subcategory->url) }}" class="btn btn-outline-dark rounded-0">
                                             View Products
                                         </a>
                                     </div>
@@ -56,10 +56,10 @@
                                         <ul class="tree list-unstyled ms-4 mt-2 border-start ps-3 d-none">
                                             @foreach ($subcategory->children as $subsubcategory)
                                                 <li class="ps-2 mb-1 d-flex justify-content-between align-items-center">
-                                                    <a href="{{ url('category/' . $subsubcategory->id) }}" class="text-dark text-decoration-none small">
+                                                    <a href="{{ url('category/' . $subsubcategory->url) }}" class="text-dark text-decoration-none small">
                                                         {{ $subsubcategory->name }}
                                                     </a>
-                                                    <a href="{{ url('category/' . $subsubcategory->id) }}" class="btn btn-outline-dark rounded-0">
+                                                    <a href="{{ url('category/' . $subsubcategory->url) }}" class="btn btn-outline-dark rounded-0">
                                                         View Products
                                                     </a>
                                                 </li>
