@@ -51,7 +51,7 @@
                                 {{-- Address Row --}}
                                 <div class="small text-muted" style="font-family: Arial, sans-serif;">
                                     <span class="d-block text-truncate" style="max-width: 100%;">
-                                        <strong>Address:</strong>
+                                        <strong class="text-dark">Address:</strong>
                                         {{ $order->first_name }} {{ $order->last_name }} |
                                         {{ $order->phone }} |
                                         {{ $order->city }}

@@ -128,19 +128,20 @@
                         @foreach ($cartItems as $item)
                             <div
                                 class="d-flex align-items-center justify-content-between border-bottom py-3 flex-wrap gap-3">
-                                <div class="d-flex align-items-center flex-grow-1" style="min-width: 200px;">
-                                    <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="rounded me-3"
-                                        style="width: 100px; height: 130px; object-fit: cover;">
-                                    <div>
-                                        <span class="d-block fw-semibold" style="font-family: Arial, sans-serif;">
-                                            {{ $item->name }}
-                                        </span>
-                                        <span class="text-muted d-block" style="font-family: Arial, sans-serif;">
-                                            {{ 'Rs.' . number_format($item->price, 2) }}
-                                        </span>
+                                <a href="{{ route('prduct.details', ['url' => $item->url]) }}" class="nav-link">
+                                    <div class="d-flex align-items-center flex-grow-1" style="min-width: 200px;">
+                                        <img src="{{ asset($item->image) }}" alt="{{ $item->name }}" class="rounded me-3"
+                                            style="width: 100px; height: 130px; object-fit: cover;">
+                                        <div>
+                                            <span class="d-block fw-semibold" style="font-family: Arial, sans-serif;">
+                                                {{ $item->name }}
+                                            </span>
+                                            <span class="text-muted d-block" style="font-family: Arial, sans-serif;">
+                                                {{ 'Rs.' . number_format($item->price, 2) }}
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-
+                                </a>
                                 <!-- Quantity Controls -->
                                 <div class="d-flex align-items-center justify-content-center" style="min-width: 140px;">
                                     <div class="input-group input-group-sm quantity-group"

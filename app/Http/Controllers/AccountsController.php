@@ -37,6 +37,7 @@ class AccountsController extends Controller
             ->select(
                 'order_items.*',
                 'products.image as product_image',
+                'products.url as url',
             )
             ->where('order_items.order_id', $order->id)
             ->get();

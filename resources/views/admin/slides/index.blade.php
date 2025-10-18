@@ -76,7 +76,20 @@
                                         <a href="{{ route('admin.slide.edit', ['id' => $slide->id]) }}">
                                             <img src="{{ asset($slide->image) }}" height="100px" width="250"
                                                 alt="">
+
                                         </a>
+                                        @if ($slide->text && $slide->link)
+                                            <span class="text-dark">{{ $slide->text }}</span>
+                                            |
+                                            <a href="{{ $slide->link }}" target="_BLANK">{{ $slide->link }}</a>
+                                        @elseif ($slide->text)
+                                            <span class="text-dark">{{ $slide->text }}</span>
+                                        @else
+                                            <a href="{{ $slide->link }}" target="_BLANK">{{ $slide->link }}</a>
+                                        @endif
+
+
+
                                     </td>
                                     <td class="text-center">
                                         <div class="dropdown ms-auto">
@@ -90,6 +103,11 @@
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.slide.edit', ['id' => $slide->id]) }}">
                                                         Edit
+                                                    </a>
+                                                </li>
+                                                 <li>
+                                                    <a class="dropdown-item" onclick="confirmDelete('{{ route('admin.slide.delete', ['id' => $slide->id]) }}')">
+                                                        Delete
                                                     </a>
                                                 </li>
                                             </ul>
@@ -123,6 +141,43 @@
         </div>
 
     </div>
+
+
+
+
+        <script>
+        function confirmAction(url, action) {
+            Swal.fire({
+                title: `Are you sure you want to ${action} this Slide?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: `Yes, ${action} it!`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            })
+        }
+
+
+        function confirmDelete(url) {
+            Swal.fire({
+                title: 'Are you sure you want to delete this Slide?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            })
+        }
+    </script>
 
 
 @endsection

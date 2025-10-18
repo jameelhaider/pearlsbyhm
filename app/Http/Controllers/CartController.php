@@ -70,6 +70,7 @@ class CartController extends Controller
                 'products.image as image',
                 'products.name as name',
                 'products.price as price',
+                'products.url as url',
                 'cart_items.id as cart_item_id',
                 'cart_items.qty as qty'
             )

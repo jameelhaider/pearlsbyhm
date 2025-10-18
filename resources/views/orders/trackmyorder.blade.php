@@ -71,7 +71,7 @@
 
                             <p><strong>Placed On:</strong>
                                 {{ \Carbon\Carbon::parse($order->created_at)->format('d M Y, h:i A') }}</p>
-                            <p><strong>Total Amount:</strong> Rs {{ number_format($order->total, 0) }}</p>
+                            <p><strong>Total Amount:</strong> Rs. {{ number_format($order->total, 2) }}</p>
                         </div>
                     </div>
                 </div>

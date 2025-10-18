@@ -58,8 +58,8 @@
                                 <img src="{{ asset($slide->image) }}" height="100px" width="250" alt="Slide Image">
                             </div>
                         @endif
-
-                        <input type="file" class="form-control @error('image') is-invalid @enderror" name="image">
+                        <input type="file" accept="image/*" class="form-control @error('image') is-invalid @enderror"
+                            name="image">
                         @error('image')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -73,7 +73,8 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="mb-3">
                             <label for="text" class="fw-bold mb-2">Any Text (optional)</label>
-                            <input type="text" id="text" name="text" value="{{ old('text') }}"
+                            <input type="text" id="text" name="text" value="{{ old('text', $slide->text) }}
+"
                                 class="form-control @error('text') is-invalid @enderror"
                                 placeholder="Enter any optional text">
                             @error('text')
@@ -86,7 +87,7 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="mb-3">
                             <label for="link" class="fw-bold mb-2">Any Link (optional)</label>
-                            <input type="text" id="link" name="link" value="{{ old('link') }}"
+                            <input type="text" id="link" name="link" value="{{ old('link', $slide->link) }}"
                                 class="form-control @error('link') is-invalid @enderror"
                                 placeholder="Enter any optional link">
                             @error('link')

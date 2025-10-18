@@ -39,8 +39,8 @@ class SlidesController extends Controller
         if ($request->hasFile('image')) {
             $slide->image = CommonController::imgUpload($request->image, 'Slide Images');
         }
-        $slide->link = $request->link;
-        $slide->text = $request->text;
+        $slide->link = $request->link ?? null;
+        $slide->text = $request->text ?? null;
         $slide->save();
         return redirect()
             ->route('admin.slide.index')
@@ -57,11 +57,31 @@ class SlidesController extends Controller
             $previousImage = $slide->image;
             $slide->image = CommonController::imgUpload($request->image, 'Slide Images', $previousImage);
         }
-        $slide->text = $request->text;
-        $slide->link = $request->link;
+        $slide->text = $request->text ?? null;
+        $slide->link = $request->link ?? null;
         $slide->save();
         return redirect()
             ->route('admin.slide.index')
             ->with('success', 'Slide updated successfully.');
+    }
+
+
+
+    public function delete($id)
+    {
+        $slide = DB::table('slides')->where('id', $id)->first();
+        if ($slide) {
+            if (file_exists(public_path($slide->image))) {
+                unlink(public_path($slide->image));
+            }
+            DB::table('slides')->where('id', $id)->delete();
+            return redirect()
+                ->route('admin.slide.index')
+                ->with('success', 'Slide deleted successfully.');
+        } else {
+            return redirect()
+                ->route('admin.slide.index')
+                ->with('error', 'Slide not found.');
+        }
     }
 }

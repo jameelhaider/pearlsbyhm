@@ -1,7 +1,5 @@
 @extends('admin.layouts.app')
-
-@section('title', 'Manage Categories')
-
+@section('admin_title', 'Admin | Categories')
 @section('content2')
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-3">

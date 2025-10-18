@@ -16,7 +16,6 @@ class ProductsController extends Controller
     public function index(Request $request)
     {
         $query = Product::with(['category.parent']);
-
         if ($request->name) {
             $query->where('name', 'LIKE', '%' . $request->name . '%');
         }
@@ -182,5 +181,45 @@ class ProductsController extends Controller
             return redirect()->route('welcome');
         }
         return view('products.details', compact('product'));
+    }
+
+
+    public function delete($id)
+    {
+        $product = DB::table('products')->where('id', $id)->first();
+
+        if ($product) {
+            if (!empty($product->image) && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
+            if (!empty($product->hover_image) && file_exists(public_path($product->hover_image))) {
+                unlink(public_path($product->hover_image));
+            }
+            $productImages = DB::table('product_images')->where('product_id', $id)->get();
+            foreach ($productImages as $img) {
+                if (!empty($img->image) && file_exists(public_path($img->image))) {
+                    unlink(public_path($img->image));
+                }
+            }
+            DB::table('product_images')->where('product_id', $id)->delete();
+            DB::table('wishlists')->where('product_id', $id)->delete();
+            $cartItems = DB::table('cart_items')->where('product_id', $id)->get();
+
+            foreach ($cartItems as $item) {
+                $cartItemCount = DB::table('cart_items')->where('cart_id', $item->cart_id)->count();
+                DB::table('cart_items')->where('id', $item->id)->delete();
+                if ($cartItemCount === 1) {
+                    DB::table('carts')->where('id', $item->cart_id)->delete();
+                }
+            }
+            DB::table('products')->where('id', $id)->delete();
+            return redirect()
+                ->route('admin.product.index')
+                ->with('success', 'Product and related records deleted successfully.');
+        } else {
+            return redirect()
+                ->route('admin.product.index')
+                ->with('error', 'Product not found.');
+        }
     }
 }

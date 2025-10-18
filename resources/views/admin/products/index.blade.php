@@ -59,8 +59,8 @@
             <form action="" method="GET">
                 <div class="row">
                     <div class="col-lg-10 col-md-9 col-sm-6 col-6 mt-1 mb-1">
-                        <input type="number" min="1" class="form-control" value="{{ request()->acc_id }}"
-                            placeholder="Acccount ID" name="acc_id">
+                        <input type="text" class="form-control" value="{{ request()->name }}" placeholder="Name"
+                            name="name">
                     </div>
                     <div class="col-lg-2 col-md-3 col-sm-6 col-6 mt-1 mb-1">
                         <div class="btn-group w-100">
@@ -94,12 +94,10 @@
                         <thead>
                             <tr>
                                 <th style="font-size:14px;" class="text-dark fw-bold text-center">#</th>
-                                <th style="font-size:14px;" class="text-dark fw-bold">Image</th>
-                                <th style="font-size:14px;" class="text-dark fw-bold">Name</th>
+                                <th style="font-size:14px;" class="text-dark fw-bold">Product</th>
                                 <th style="font-size:14px;" class="text-dark fw-bold">Category</th>
                                 <th style="font-size:14px;" class="text-dark fw-bold">Price</th>
-                                <th style="font-size:14px;" class="text-dark fw-bold text-center">Description</th>
-                                <th style="font-size:14px" class="text-dark fw-bold text-center">Action</th>
+                                <th style="font-size:14px;" class="text-dark fw-bold text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -107,28 +105,32 @@
                                 <tr>
                                     <td class="text-dark text-center">{{ ++$key }}</td>
                                     <td>
-                                        <img src="{{ asset($product->image) }}" height="70px" width="60px"
-                                            alt="">
-                                    </td>
-                                    <td class="fw-bold">
                                         <a href="{{ route('admin.product.edit', ['id' => $product->id]) }}">
-                                            {{ $product->name }}
+                                            <img src="{{ asset($product->image) }}" height="70px" width="60px"
+                                                alt="">
+                                            <span class="ms-2 fw-bold">{{ $product->name }}</span>
                                         </a>
                                     </td>
                                     <td class="text-dark">
                                         @if ($product->category)
-                                            @if ($product->category->parent)
-                                                {{ $product->category->parent->name . ' / ' . $product->category->name }}
-                                            @else
-                                                {{ $product->category->name }}
-                                            @endif
+                                            @php
+                                                $categoryNames = [];
+                                                $category = $product->category;
+                                                while ($category) {
+                                                    $categoryNames[] = $category->name;
+                                                    $category = $category->parent;
+                                                }
+                                                $categoryPath = implode(' / ', array_reverse($categoryNames));
+                                            @endphp
+
+                                            {{ $categoryPath }}
                                         @else
                                             <span class="text-muted">No Category</span>
                                         @endif
                                     </td>
 
+
                                     <td class="text-dark">{{ 'Rs.' . number_format($product->price) }}</td>
-                                    <td class="text-center text-dark">{{ $product->description }}</td>
                                     <td class="text-center">
                                         <div class="dropdown ms-auto">
                                             <button class="btn btn-dark btn-sm dropdown-toggle" type="button"
@@ -141,6 +143,12 @@
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.product.edit', ['id' => $product->id]) }}">
                                                         Edit
+                                                    </a>
+                                                </li>
+                                                 <li>
+                                                    <a class="dropdown-item"
+                                                        onclick="confirmDelete('{{ route('admin.product.delete', ['id' => $product->id]) }}')">
+                                                        Delete
                                                     </a>
                                                 </li>
                                             </ul>
@@ -156,17 +164,16 @@
                     </div>
                 </div>
             @else
-                 <div class="table-responsive">
+                <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th style="font-size:14px;" class="text-dark fw-bold text-center">#</th>
-                                <th style="font-size:14px;" class="text-dark fw-bold">Name
+                                <th style="font-size:14px;" class="text-dark fw-bold">Product
                                 </th>
                                 <th style="font-size:14px;" class="text-dark fw-bold">Category</th>
                                 <th style="font-size:14px;" class="text-dark fw-bold text-center">Price
                                 </th>
-                                <th style="font-size:14px;" class="text-dark fw-bold">Qty</th>
                                 <th style="font-size:14px" class="text-dark fw-bold text-center">Action</th>
                             </tr>
                         </thead>
@@ -180,5 +187,37 @@
 
     </div>
 
+   <script>
+        function confirmAction(url, action) {
+            Swal.fire({
+                title: `Are you sure you want to ${action} this Product?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: `Yes, ${action} it!`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            })
+        }
 
+
+        function confirmDelete(url) {
+            Swal.fire({
+                title: 'Are you sure you want to delete this Product?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url;
+                }
+            })
+        }
+    </script>
 @endsection

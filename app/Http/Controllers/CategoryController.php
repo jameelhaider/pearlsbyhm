@@ -91,11 +91,22 @@ class CategoryController extends Controller
     public function delete($id)
     {
         $category = Category::findOrFail($id);
+        $this->deleteChildCategories($category);
         $category->delete();
-
-        return redirect()->route('admin.category.index')
-            ->with('success', 'Category deleted successfully.');
+        return redirect()
+            ->route('admin.category.index')
+            ->with('success', 'Category and all its subcategories deleted successfully.');
     }
+
+    private function deleteChildCategories($category)
+    {
+        $children = Category::where('parent_id', $category->id)->get();
+        foreach ($children as $child) {
+            $this->deleteChildCategories($child);
+            $child->delete();
+        }
+    }
+
 
 
 

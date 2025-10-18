@@ -177,7 +177,7 @@
                     </li>
 
 
-                       <li
+                    <li
                         class="menu-header small text-uppercase fw-bold {{ Request::is('admin/slides') || Request::is('admin/slides/create') ? '' : 'text-dark' }}">
                         <span class="menu-header-text">Slides</span>
                     </li>
@@ -185,13 +185,14 @@
                         class="menu-item {{ Request::is('admin/slides') || Request::is('admin/slides/create') ? 'active' : '' }}">
                         <a href="{{ url('admin/slides') }}"
                             class="menu-link {{ Request::is('admin/slides') || Request::is('admin/slides/create') ? '' : 'text-dark' }} d-flex align-items-center">
-                            <i class="menu-icon tf-icons bx bx-mobile-alt"></i>
+                            <i class="menu-icon tf-icons bx bx-slideshow"></i>
                             <div data-i18n="Support" class="flex-grow-1">Slides</div>
                         </a>
                     </li>
 
 
-                     <li
+
+                    <li
                         class="menu-header small text-uppercase fw-bold {{ Request::is('admin/products') || Request::is('admin/products/create') ? '' : 'text-dark' }}">
                         <span class="menu-header-text">Products</span>
                     </li>
@@ -199,7 +200,7 @@
                         class="menu-item {{ Request::is('admin/products') || Request::is('admin/products/create') ? 'active' : '' }}">
                         <a href="{{ url('admin/products') }}"
                             class="menu-link {{ Request::is('admin/products') || Request::is('admin/products/create') ? '' : 'text-dark' }} d-flex align-items-center">
-                            <i class="menu-icon tf-icons bx bx-mobile-alt"></i>
+                            <i class="menu-icon tf-icons bx bx-package"></i>
                             <div data-i18n="Support" class="flex-grow-1">Products</div>
                         </a>
                     </li>
@@ -207,7 +208,7 @@
 
 
 
-                       <li
+                    <li
                         class="menu-header small text-uppercase fw-bold {{ Request::is('admin/categories') || Request::is('admin/categories/create') ? '' : 'text-dark' }}">
                         <span class="menu-header-text">Categories</span>
                     </li>
@@ -215,7 +216,7 @@
                         class="menu-item {{ Request::is('admin/categories') || Request::is('admin/categories/create') ? 'active' : '' }}">
                         <a href="{{ url('admin/categories') }}"
                             class="menu-link {{ Request::is('admin/categories') || Request::is('admin/categories/create') ? '' : 'text-dark' }} d-flex align-items-center">
-                            <i class="menu-icon tf-icons bx bx-mobile-alt"></i>
+                            <i class="menu-icon tf-icons bx bx-category"></i>
                             <div data-i18n="Support" class="flex-grow-1">Categories</div>
                         </a>
                     </li>
@@ -245,8 +246,8 @@
                         <div class="navbar-nav align-items-center">
                             <div class="nav-item d-flex align-items-center">
                                 <i class="bx bx-search fs-4 lh-0"></i>
-                                <input type="text" class="form-control border-0 shadow-none" placeholder="Search..."
-                                    aria-label="Search..." />
+                                <input type="text" class="form-control border-0 shadow-none"
+                                    placeholder="Search..." aria-label="Search..." />
                             </div>
                         </div>
                         <!-- /Search -->
@@ -318,7 +319,7 @@
                 <!-- Content wrapper -->
                 <div class="content-wrapper">
                     <div class="py-2 px-0">
-                         @include('alert')
+                        @include('alert')
                         @yield('content2')
                     </div>
 

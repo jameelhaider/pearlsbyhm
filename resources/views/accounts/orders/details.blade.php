@@ -75,8 +75,12 @@
                     <h5 class="mb-3">Order Information</h5>
                     <ul class="list-group list-group-flush small">
                         <li class="list-group-item px-0 d-flex justify-content-between">
-                            <strong>Date | Time:</strong>
+                            <strong>Order Placed:</strong>
                             <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d M y, h:i A') }}</span>
+                        </li>
+                        <li class="list-group-item px-0 d-flex justify-content-between">
+                            <strong>Tracking ID:</strong>
+                            <span>{{ $order->tracking_id }}</span>
                         </li>
 
                         @php
@@ -145,9 +149,12 @@
                                 @foreach ($order_items as $item)
                                     <tr>
                                         <td class="d-flex align-items-center gap-2">
-                                            <img src="{{ asset($item->product_image) }}" height="70" width="70"
-                                                alt="{{ $item->name }}">
-                                            <span>{{ $item->name ?? 'N/A' }}</span>
+                                            <a class="nav-link" href="{{ route('prduct.details',['url'=>$item->url]) }}">
+                                                <img src="{{ asset($item->product_image) }}" height="70" width="70"
+                                                    alt="{{ $item->name }}">
+                                                <span>{{ $item->name ?? 'N/A' }}</span>
+                                            </a>
+
                                         </td>
                                         <td class="text-center">{{ $item->qty }}</td>
                                         <td>Rs. {{ number_format($item->price, 2) }}</td>

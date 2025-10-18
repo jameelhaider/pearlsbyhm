@@ -61,7 +61,7 @@
                             </div>
                         @endif
 
-                        <input type="file" class="form-control @error('image') is-invalid @enderror" name="image">
+                        <input type="file" accept="image/*" class="form-control @error('image') is-invalid @enderror" name="image">
                         @error('image')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -79,7 +79,7 @@
                             </div>
                         @endif
 
-                        <input type="file" class="form-control @error('hover_image') is-invalid @enderror"
+                        <input type="file" accept="image/*" class="form-control @error('hover_image') is-invalid @enderror"
                             name="hover_image">
                         @error('hover_image')
                             <span class="invalid-feedback" role="alert">
