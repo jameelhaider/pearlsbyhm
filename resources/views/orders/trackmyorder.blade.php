@@ -56,6 +56,7 @@
                                 @if ($order->status === 'Pending') bg-danger
                                 @elseif ($order->status === 'In Process') bg-warning text-dark
                                 @elseif ($order->status === 'Packed, Ready To Ship') bg-primary
+                                @elseif ($order->status === 'Cancelled') bg-secondary
                                 @elseif ($order->status === 'Sent To Parcel Delivered Company') bg-info text-dark
                                 @else bg-success @endif">
                                     {{ $order->status }}

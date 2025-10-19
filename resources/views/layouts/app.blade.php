@@ -871,7 +871,7 @@
                     <div>
                         <a href="#" class="text-light me-3 fs-5"><i class="bi bi-facebook"></i></a>
                         <a href="#" class="text-light me-3 fs-5"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="text-light fs-5"><i class="bi bi-whatsapp"></i></a>
+                        <a href="https://wa.me/923158425273" target="_BLANK" class="text-light fs-5"><i class="bi bi-whatsapp"></i></a>
                     </div>
                 </div>
 

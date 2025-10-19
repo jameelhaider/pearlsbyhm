@@ -177,6 +177,64 @@
                     </li>
 
 
+
+
+                    <li class="menu-header small text-uppercase fw-bold text-dark">
+                        <span class="menu-header-text">Manage Orders</span>
+                    </li>
+
+                    <li class="menu-item {{ Request::is('admin/orders/pending') ? 'active' : '' }}">
+                        <a href="{{ url('admin/orders/pending') }}"
+                            class="menu-link d-flex align-items-center {{ Request::is('admin/orders/pending') ? '' : 'text-dark' }}">
+                            <i class="menu-icon tf-icons bx bx-time-five"></i>
+                            <div class="flex-grow-1">Pending</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item {{ Request::is('admin/orders/in-process') ? 'active' : '' }}">
+                        <a href="{{ url('admin/orders/in-process') }}"
+                            class="menu-link d-flex align-items-center {{ Request::is('admin/orders/in-process') ? '' : 'text-dark' }}">
+                            <i class="menu-icon tf-icons bx bx-loader-circle"></i>
+                            <div class="flex-grow-1">In Process</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item {{ Request::is('admin/orders/packed') ? 'active' : '' }}">
+                        <a href="{{ url('admin/orders/packed') }}"
+                            class="menu-link d-flex align-items-center {{ Request::is('admin/orders/packed') ? '' : 'text-dark' }}">
+                            <i class="menu-icon tf-icons bx bx-box"></i>
+                            <div class="flex-grow-1">Packed</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item {{ Request::is('admin/orders/sent') ? 'active' : '' }}">
+                        <a href="{{ url('admin/orders/sent') }}"
+                            class="menu-link d-flex align-items-center {{ Request::is('admin/orders/sent') ? '' : 'text-dark' }}">
+                            <i class="menu-icon tf-icons bx bx-car"></i>
+                            <div class="flex-grow-1">Sent</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item {{ Request::is('admin/orders/delivered') ? 'active' : '' }}">
+                        <a href="{{ url('admin/orders/delivered') }}"
+                            class="menu-link d-flex align-items-center {{ Request::is('admin/orders/delivered') ? '' : 'text-dark' }}">
+                            <i class="menu-icon tf-icons bx bx-check-circle"></i>
+                            <div class="flex-grow-1">Delivered</div>
+                        </a>
+                    </li>
+
+                       <li class="menu-item {{ Request::is('admin/orders/cancelled') ? 'active' : '' }}">
+                        <a href="{{ url('admin/orders/cancelled') }}"
+                            class="menu-link d-flex align-items-center {{ Request::is('admin/orders/cancelled') ? '' : 'text-dark' }}">
+                            <i class="menu-icon tf-icons bx bx-x"></i>
+                            <div class="flex-grow-1">Cancelled</div>
+                        </a>
+                    </li>
+
+
+
+
+
                     <li
                         class="menu-header small text-uppercase fw-bold {{ Request::is('admin/slides') || Request::is('admin/slides/create') ? '' : 'text-dark' }}">
                         <span class="menu-header-text">Slides</span>

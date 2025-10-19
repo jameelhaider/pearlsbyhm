@@ -151,7 +151,7 @@
                     <div class="feature-box p-4 rounded-0 shadow-sm bg-white h-100">
                         <i class="bi bi-headset display-5 text-success mb-3"></i>
                         <h5 class="fw-bold">Support</h5>
-                        <p class="text-muted small mb-0">Contact us 09:00 - 18:00 PKT (Mon–Sat) <br> +92336-6886889</p>
+                        <p class="text-muted small mb-0">Contact us 09:00 - 18:00 PKT (Mon–Sat) <br> +92315-8425273</p>
                     </div>
                 </div>
 

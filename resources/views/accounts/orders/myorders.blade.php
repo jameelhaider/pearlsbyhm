@@ -31,6 +31,7 @@
                                         $badgeClass = match ($order->status) {
                                             'Pending' => 'bg-danger',
                                             'In Process' => 'bg-warning text-dark',
+                                            'Cancelled' => 'bg-secondary',
                                             'Packed, Ready To Ship' => 'bg-primary',
                                             'Sent To Parcel Delivered Company' => 'bg-info text-dark',
                                             default => 'bg-success',

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\SlidesController;
 use App\Http\Controllers\WishlistController;
@@ -27,6 +28,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware('admin.auth')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/orders/{status}', [OrdersController::class, 'index'])->name('orders');
+        Route::get('/order/{id}/details', [OrdersController::class, 'details'])->name('order.details');
+        Route::get('/order/{id}/cancel', [OrdersController::class, 'cancel'])->name('order.cancel');
+
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
 

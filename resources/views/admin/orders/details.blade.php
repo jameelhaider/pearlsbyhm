@@ -1,75 +1,58 @@
-@extends('layouts.app')
-@php
-    $title = 'Order Details # ' . $order->tracking_id . ' - Pearls By HM';
-@endphp
-@section('title', $title)
+@extends('admin.layouts.app')
+@section('admin_title', 'Details | Order # ' . $order->tracking_id)
+@section('content2')
+    <div class="container-fluid px-3">
+        <div class="card shadow-sm bg-white rounded-0">
+            <div class="row">
+                <div class="col-lg-2 col-md-3 col-6 col-sm-4">
+                    <a @if ($order->status == 'Pending') href="{{ url('admin/orders/pending') }}"
+@elseif ($order->status == 'In Process')
+   href="{{ url('admin/orders/in-process') }}"
+@elseif ($order->status == 'Packed, Ready To Ship')
+    href="{{ url('admin/orders/packed') }}"
+@elseif ($order->status == 'Sent To Parcel Delivered Company')
+  href="{{ url('admin/orders/sent') }}"
+  @elseif ($order->status == 'Cancelled')
+  href="{{ url('admin/orders/cancelled') }}"
+@else
+    href="{{ url('admin/orders/delivered') }}" @endif
+                        class="btn btn-dark custom-back-button d-flex align-items-center justify-content-center">
+                        <i class="bx bx-chevron-left me-1"></i> Back
+                    </a>
+                </div>
+                <div class="col-lg-10 col-md-9 col-6 col-sm-8">
+                    <h3 class="mt-1 d-none d-md-bloack d-lg-block" style="font-family:cursive">Details | Order #
+                        {{ $order->tracking_id }}</h3>
 
-@section('content')
-    <style>
-        * {
-            font-family: 'Arimo', sans-serif !important;
-        }
-
-        .order-details-card h5 {
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .table th,
-        .table td {
-            vertical-align: middle;
-            font-size: 0.95rem;
-            word-break: break-word;
-        }
-
-        .table img {
-            border-radius: 6px;
-            object-fit: cover;
-        }
-
-        @media (max-width: 768px) {
-
-            .table th,
-            .table td {
-                font-size: 0.85rem;
-            }
-
-            .btn-solid-black {
-                width: 100%;
-                text-align: center;
-                margin-top: 8px;
-            }
-
-            .list-group-item strong {
-                width: 40%;
-            }
-
-            .list-group-item span {
-                width: 55%;
-                text-align: right;
-            }
-        }
-    </style>
-
-    <div class="container-fluid py-4 px-3 px-md-4">
-        {{-- Breadcrumb --}}
-        <nav aria-label="breadcrumb" class="mb-3">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('myorders.index') }}">My Orders</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Order Details # {{ $order->tracking_id }}</li>
-            </ol>
-        </nav>
-
-        {{-- Header --}}
-        <div class="text-center">
-            <h4 class="fw-bold mb-2" style="letter-spacing: 1px;">ORDER DETAILS # {{ $order->tracking_id }}</h4>
-            <a href="{{ route('myorders.index') }}" class="btn-solid-black nav-link w-100">Back to Orders</a>
+                    <h5 class="mt-1 d-block d-md-none d-lg-none" style="font-family:cursive">Details | Order #
+                        {{ $order->tracking_id }}</h5>
+                </div>
+            </div>
         </div>
 
-        {{-- Order Info + Items --}}
-        <div class="card order-details-card rounded-0 p-3 p-md-4 mt-2">
-            <div class="row g-4">
+
+        <style>
+            .custom-back-button {
+                font-size: 16px;
+                height: 100%;
+                width: 100%;
+                border-radius: 0;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                font-weight: 500;
+            }
+
+            .custom-back-button:hover {
+                background-color: #314861;
+            }
+
+            .custom-back-button i {
+                font-size: 18px;
+            }
+        </style>
+
+        <div class="card p-3 mt-3">
+   <div class="row g-4">
                 {{-- LEFT COLUMN --}}
                 <div class="col-lg-6 col-md-12">
                     <h5 class="mb-3">Order Information</h5>
@@ -149,7 +132,7 @@
                                 @foreach ($order_items as $item)
                                     <tr>
                                         <td class="d-flex align-items-center gap-2">
-                                            <a class="nav-link" href="{{ route('prduct.details', ['url' => $item->url]) }}">
+                                            <a class="nav-link" target="_Blank" href="{{ route('prduct.details', ['url' => $item->url]) }}">
                                                 <img src="{{ asset($item->product_image) }}" height="70" width="70"
                                                     alt="{{ $item->name }}">
                                                 <span>{{ $item->name ?? 'N/A' }}</span>
