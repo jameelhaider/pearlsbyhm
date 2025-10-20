@@ -4,7 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Notifications\OrderCancelledUserNotification;
+use App\Notifications\OrderDeliveredUserNotification;
+use App\Notifications\OrderInprocessUserNotification;
+use App\Notifications\OrderPackedUserNotification;
+use App\Notifications\OrderSentUserNotification;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 
 class OrdersController extends Controller
 {
@@ -49,11 +56,29 @@ class OrdersController extends Controller
         return view('admin.orders.details', compact('order', 'order_items'));
     }
 
-    public function cancel($id)
+
+
+    public function updatestatus($id, $status)
     {
         $order = Order::findOrFail($id);
-        $order->status = 'Cancelled';
+        $order->status = $status;
         $order->save();
-        return redirect()->back()->with('success', 'Order has been cancelled successfully.');
+
+        try {
+            if ($status == 'In Process') {
+                Notification::route('mail', $order->email)->notify(new OrderInProcessUserNotification($order));
+            } elseif ($status == 'Packed, Ready To Ship') {
+                Notification::route('mail', $order->email)->notify(new OrderPackedUserNotification($order));
+            } elseif ($status == 'Sent To Parcel Delivered Company') {
+                Notification::route('mail', $order->email)->notify(new OrderSentUserNotification($order));
+            } elseif ($status == 'Delivered') {
+                Notification::route('mail', $order->email)->notify(new OrderDeliveredUserNotification($order));
+            }elseif ($status == 'Cancelled') {
+                Notification::route('mail', $order->email)->notify(new OrderCancelledUserNotification($order));
+            }
+        } catch (\Exception $e) {
+            Log::error('Order email failed: ' . $e->getMessage());
+        }
+        return redirect()->back()->with('success', 'Order status has been updated and user notified successfully.');
     }
 }

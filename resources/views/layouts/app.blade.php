@@ -211,7 +211,9 @@
         </div>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{ url('/') }}"><img src="{{ asset('uploads/c2.png') }}" height="60px" width="70px" alt=""> <span style="font-size: 20px" class="fw-bold">Pearls By HM</span></a>
+                <a class="navbar-brand" href="{{ url('/') }}"><img src="{{ asset('uploads/c2.png') }}"
+                        height="60px" width="70px" alt=""> <span style="font-size: 20px"
+                        class="fw-bold">Pearls By HM</span></a>
 
                 {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -450,7 +452,8 @@
                                             alt="Slide Image">
                                     </a>
                                 @else
-                                    <img class="d-block w-100 img-fluid" src="{{ $slide->image }}" alt="Slide Image">
+                                    <img class="d-block w-100 img-fluid" src="{{ $slide->image }}"
+                                        alt="Slide Image">
                                 @endif
 
 
@@ -871,7 +874,8 @@
                     <div>
                         <a href="#" class="text-light me-3 fs-5"><i class="bi bi-facebook"></i></a>
                         <a href="#" class="text-light me-3 fs-5"><i class="bi bi-instagram"></i></a>
-                        <a href="https://wa.me/923158425273" target="_BLANK" class="text-light fs-5"><i class="bi bi-whatsapp"></i></a>
+                        <a href="https://wa.me/923158425273" target="_BLANK" class="text-light fs-5"><i
+                                class="bi bi-whatsapp"></i></a>
                     </div>
                 </div>
 
@@ -892,10 +896,19 @@
                 <div class="col-md-3 mb-4">
                     <h6 class="fw-bold text-uppercase mb-3">Customer Support</h6>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="#" class="footer-link">FAQs</a></li>
-                        <li class="mb-2"><a href="#" class="footer-link">Return Policy</a></li>
-                        <li class="mb-2"><a href="#" class="footer-link">Shipping Info</a></li>
-                        <li class="mb-2"><a href="#" class="footer-link">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="{{ route('privacy') }}" class="footer-link">Privacy Policy</a>
+                        </li>
+
+                        <li class="mb-2"><a href="{{ route('return') }}" class="footer-link">Exchange &
+                                Return</a></li>
+                        <li class="mb-2"><a href="{{ route('shipping') }}" class="footer-link">Shipping
+                                Policy</a></li>
+                        <li class="mb-2"><a href="{{ route('terms') }}" class="footer-link">Terms &
+                                Conditions</a></li>
+                        <li class="mb-2"><a href="{{ route('cancel') }}" class="footer-link">Order Cancel
+                                Policy</a></li>
+                        <li class="mb-2"><a href="{{ route('faqs') }}" class="footer-link">FAQs</a></li>
+
                     </ul>
                 </div>
 
@@ -903,7 +916,10 @@
                 <div class="col-md-2 mb-4">
                     <h6 class="fw-bold text-uppercase mb-3">Contact</h6>
                     <p class="small mb-1"><i class="bi bi-geo-alt-fill me-2"></i>Gujranwala, Pakistan</p>
-                    <p class="small mb-1"><i class="bi bi-telephone-fill me-2"></i>+92 315 8425273</p>
+                    <a href="https://wa.me/923158425273" target="_BLANK" class="nav-link">
+                        <p class="small mb-1"><i class="bi bi-telephone-fill me-2"></i>+92 315 8425273</p>
+                    </a>
+
                 </div>
 
             </div>

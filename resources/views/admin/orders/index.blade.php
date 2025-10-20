@@ -182,13 +182,59 @@
                                                     </a>
                                                 </li>
 
+                                                @if ($order->status == 'Pending')
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                            onclick="confirmAction('{{ route('admin.order.status.update', ['id' => $order->id, 'status' => 'In Process']) }}','Update the status as In Process of')">
+                                                            Move To In Process
+                                                        </a>
+                                                    </li>
+                                                @endif
+
+                                                @if ($order->status == 'In Process' || $order->status == 'Pending')
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                            onclick="confirmAction('{{ route('admin.order.status.update', ['id' => $order->id, 'status' => 'Packed, Ready To Ship']) }}','Update the status as Packed of')">
+                                                            Move To Packed
+                                                        </a>
+                                                    </li>
+                                                @endif
+
+
+                                                @if ($order->status == 'Packed, Ready To Ship' || $order->status == 'Pending' || $order->status == 'In Process')
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                            onclick="confirmAction('{{ route('admin.order.status.update', ['id' => $order->id, 'status' => 'Sent To Parcel Delivered Company']) }}','Update the status as Sent of')">
+                                                            Move To Sent
+                                                        </a>
+                                                    </li>
+                                                @endif
+
+
+                                                @if (
+                                                    $order->status == 'Sent To Parcel Delivered Company' ||
+                                                        $order->status == 'Pending' ||
+                                                        $order->status == 'In Process' ||
+                                                        $order->status == 'Packed, Ready To Ship')
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                            onclick="confirmAction('{{ route('admin.order.status.update', ['id' => $order->id, 'status' => 'Delivered']) }}','Update the status as Delivered of')">
+                                                            Move To Delivered
+                                                        </a>
+                                                    </li>
+                                                @endif
+
+
+
+
+
                                                 @if (
                                                     $order->status != 'Cancelled' &&
                                                         $order->status != 'Sent To Parcel Delivered Company' &&
                                                         $order->status != 'Delivered')
                                                     <li>
                                                         <a class="dropdown-item"
-                                                            onclick="confirmAction('{{ route('admin.order.cancel', ['id' => $order->id]) }}','Cancel')">
+                                                             onclick="confirmAction('{{ route('admin.order.status.update', ['id' => $order->id, 'status' => 'Cancelled']) }}','Cancell')">
                                                             Cancel Order
                                                         </a>
                                                     </li>

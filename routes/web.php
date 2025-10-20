@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\SlidesController;
@@ -30,7 +31,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::get('/orders/{status}', [OrdersController::class, 'index'])->name('orders');
         Route::get('/order/{id}/details', [OrdersController::class, 'details'])->name('order.details');
-        Route::get('/order/{id}/cancel', [OrdersController::class, 'cancel'])->name('order.cancel');
+        Route::get('/order/{id}/update/status/{status}', [OrdersController::class, 'updatestatus'])->name('order.status.update');
 
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
@@ -56,7 +57,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/', [CategoryController::class, 'index'])->name("category.index");
         });
 
-         Route::group(['prefix' => 'slides'], function () {
+        Route::group(['prefix' => 'faqs'], function () {
+            Route::post('/submit', [FaqsController::class, 'submit'])->name("faq.submit");
+            Route::get('/create', [FaqsController::class, 'create'])->name("faq.create");
+            Route::get('/edit/{id}', [FaqsController::class, 'edit'])->name("faq.edit");
+            Route::get('/delete/{id}', [FaqsController::class, 'delete'])->name("faq.delete");
+            Route::post('/update/{id}', [FaqsController::class, 'update'])->name("faq.update");
+            Route::get('/', [FaqsController::class, 'index'])->name("faq.index");
+        });
+
+        Route::group(['prefix' => 'slides'], function () {
             Route::post('/submit', [SlidesController::class, 'submit'])->name("slide.submit");
             Route::get('/create', [SlidesController::class, 'create'])->name("slide.create");
             Route::get('/edit/{id}', [SlidesController::class, 'edit'])->name("slide.edit");
@@ -64,8 +74,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/update/{id}', [SlidesController::class, 'update'])->name("slide.update");
             Route::get('/', [SlidesController::class, 'index'])->name("slide.index");
         });
-
-
     });
 });
 
@@ -75,11 +83,38 @@ Route::prefix('admin')->name('admin.')->group(function () {
 Route::get('/', function () {
     $products = DB::table('products')
         ->latest('created_at')
-        ->take(16)
+        ->take(32)
         ->get();
 
     return view('welcome', compact('products'));
 })->name('welcome');
+
+
+Route::get('/faqs', function () {
+    $faqs = DB::table('faqs')
+        ->get();
+    return view('usefulllinks.faqs', compact('faqs'));
+})->name('faqs');
+
+Route::get('/privacy-policy', function () {
+    return view('usefulllinks.privacy');
+})->name('privacy');
+
+Route::get('/terms-conditions', function () {
+    return view('usefulllinks.terms');
+})->name('terms');
+
+Route::get('/return-exchange', function () {
+    return view('usefulllinks.return');
+})->name('return');
+
+Route::get('/shipping-policy', function () {
+    return view('usefulllinks.shipping');
+})->name('shipping');
+
+Route::get('/order-cancel-policy', function () {
+    return view('usefulllinks.cancel');
+})->name('cancel');
 
 
 Route::get('/category/{url}', [CategoryController::class, 'show'])->name('category.show');

@@ -281,6 +281,21 @@
 
 
 
+                     <li
+                        class="menu-header small text-uppercase fw-bold {{ Request::is('admin/faqs') || Request::is('admin/faqs/create') ? '' : 'text-dark' }}">
+                        <span class="menu-header-text">FAQs</span>
+                    </li>
+                    <li
+                        class="menu-item {{ Request::is('admin/faqs') || Request::is('admin/faqs/create') ? 'active' : '' }}">
+                        <a href="{{ url('admin/faqs') }}"
+                            class="menu-link {{ Request::is('admin/faqs') || Request::is('admin/faqs/create') ? '' : 'text-dark' }} d-flex align-items-center">
+                            <i class="menu-icon tf-icons bx bx-help-circle"></i>
+                            <div data-i18n="Support" class="flex-grow-1">FAQs</div>
+                        </a>
+                    </li>
+
+
+
 
 
                 </ul>
