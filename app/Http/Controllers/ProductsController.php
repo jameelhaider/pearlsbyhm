@@ -172,16 +172,21 @@ class ProductsController extends Controller
         }
     }
 
+
     public function productdetails($url)
     {
-        $product = DB::table('products')
-            ->where('url', $url)
-            ->first();
-        if (!$product) {
-            return redirect()->route('welcome');
+        $product = \App\Models\Product::with('category.parent')->where('url', $url)->firstOrFail();
+        $breadcrumbs = [];
+        $category = $product->category;
+        while ($category) {
+            $breadcrumbs[] = $category;
+            $category = $category->parent;
         }
-        return view('products.details', compact('product'));
+        $breadcrumbs = array_reverse($breadcrumbs);
+        $product_images = $product->images;
+        return view('products.details', compact('product', 'breadcrumbs', 'product_images'));
     }
+
 
 
     public function delete($id)
