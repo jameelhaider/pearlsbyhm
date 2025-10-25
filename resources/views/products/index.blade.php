@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'All Products - Pearls By HM')
+@section('title', 'All Products - ' . site_name())
 
 @section('content')
-<style>
+    <style>
         .btn-outline-black2,
         .btn-solid-black2 {
             display: inline-block;
@@ -54,47 +54,59 @@
 
 
     <div class="container-fluid">
-        <div class="row justify-content-around g-2 mt-2">
-            @foreach ($products as $product)
-                <div class="col-lg-3 col-12 col-md-4 col-sm-6">
-                    <a href="{{ route('prduct.details', ['url' => $product->url]) }}" class="nav-link">
-                        <div class="card rounded-0 product-card">
-                            <div class="image-wrapper">
-                                <img class="main-image img-fluid" src="{{ asset($product->image) }}"
-                                    alt="{{ $product->name }}">
-                                <img class="hover-image img-fluid" src="{{ asset($product->hover_image) }}"
-                                    alt="{{ $product->name }}">
+        @if ($products->count() > 0)
+            <div class="row justify-content-around g-2 mt-2">
+                @foreach ($products as $product)
+                    <div class="col-lg-3 col-12 col-md-4 col-sm-6">
+                        <a href="{{ route('prduct.details', ['url' => $product->url]) }}" class="nav-link">
+                            <div class="card rounded-0 product-card">
+                                <div class="image-wrapper">
+                                    <img class="main-image img-fluid" src="{{ asset($product->image) }}"
+                                        alt="{{ $product->name }}">
+                                    <img class="hover-image img-fluid" src="{{ asset($product->hover_image) }}"
+                                        alt="{{ $product->name }}">
+                                </div>
+                                <h5 class="text-center mt-2 custom-font2">{{ $product->name }}</h5>
+
+                                <div class="d-flex justify-content-center gap-4">
+                                    <h6 class="text-center mb-2 custom-font2">
+                                        <del>{{ 'Rs.' . number_format($product->actual_price, 2) }}</del>
+                                    </h6>
+                                    <h6 class="text-center mb-2 custom-font2" style="color: rgb(224, 7, 7)">
+                                        {{ 'Rs.' . number_format($product->price, 2) }}</h6>
+                                </div>
+
+                                <div class="p-2">
+                                    <form action="{{ route('cart.add') }}" method="POST" class="me-1 w-100">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="qty" value="1">
+                                        <button type="submit" class="btn-solid-black2 w-100">Add to Cart</button>
+                                    </form>
+
+                                    <form action="{{ route('wishlist.add') }}" method="POST" class="w-100 mt-1">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <button type="submit" class="btn-outline-black2 w-100">ADD TO WISHLIST</button>
+                                    </form>
+                                </div>
+
                             </div>
-                            <h5 class="text-center mt-2 custom-font2">{{ $product->name }}</h5>
-
-                            <div class="d-flex justify-content-center gap-4">
-                                <h6 class="text-center mb-2 custom-font2">
-                                    <del>{{ 'Rs.' . number_format($product->actual_price, 2) }}</del>
-                                </h6>
-                                <h6 class="text-center mb-2 custom-font2" style="color: rgb(224, 7, 7)">
-                                    {{ 'Rs.' . number_format($product->price, 2) }}</h6>
-                            </div>
-
-                            <div class="p-2">
-                                <form action="{{ route('cart.add') }}" method="POST" class="me-1 w-100">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" name="qty" value="1">
-                                    <button type="submit" class="btn-solid-black2 w-100">Add to Cart</button>
-                                </form>
-
-                                <form action="{{ route('wishlist.add') }}" method="POST" class="w-100 mt-1">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <button type="submit" class="btn-outline-black2 w-100">ADD TO WISHLIST</button>
-                                </form>
-                            </div>
-
-                        </div>
-                    </a>
-                </div>
-            @endforeach
-        </div>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <div class="text-center my-5">
+                <i style="font-size: 110px;" class="bi bi-emoji-frown"></i>
+                <h2 class="text-dark fw-bold" style="font-family:Arial, sans-serif">No Products Found...</h2>
+                <p class="text-secondary" style="font-family:Arial, sans-serif">Looks like no products there.
+                </p>
+                <a href="{{ route('welcome') }}" class="btn-solid-black w-75 nav-link mt-3">
+                    BACK TO HOME
+                </a>
+            </div>
+        @endif
     </div>
 
     <style>

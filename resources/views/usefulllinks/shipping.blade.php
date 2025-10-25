@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Shipping Policy - Pearls By HM')
+@section('title', 'Shipping Policy - '.site_name())
 
 @section('content')
     <div class="container">

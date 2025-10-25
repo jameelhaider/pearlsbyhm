@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Sign In - Pearls By HM')
+@section('title', 'Sign In - '.site_name())
 @section('content')
     <div class="container py-4">
            <nav aria-label="breadcrumb">

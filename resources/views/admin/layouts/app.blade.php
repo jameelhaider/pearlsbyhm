@@ -12,7 +12,7 @@
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('uploads/c2.png') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset(site_logo()) }}" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -124,7 +124,7 @@
     </style>
 
     <div class="loader-wrapper" id="loader">
-        <img src="{{ asset('uploads/c2.png') }}" alt="Loader Image">
+        <img src="{{ asset(site_logo()) }}" alt="Loader Image">
         <div class="loader"></div>
     </div>
 
@@ -154,8 +154,8 @@
                 <div class="app-brand demo">
                     <a href="{{ url('/admin') }}" target="_BLANK" class="app-brand-link">
 
-                        <img src="{{ asset('uploads/c2.png') }}" height="35px" width="35px" alt="">
-                        <span class="fw-bolder ms-2 small text-dark">Pearls By HM</span>
+                        <img src="{{ asset(site_logo()) }}" height="41px" width="48px" alt="">
+                        <span class="fw-bolder ms-2 small text-dark">{{ site_name() }}</span>
                     </a>
 
                     <a href="javascript:void(0);"
@@ -294,6 +294,19 @@
                         </a>
                     </li>
 
+                     <li
+                        class="menu-header small text-uppercase fw-bold {{ Request::is('admin/settings') ? '' : 'text-dark' }}">
+                        <span class="menu-header-text">Settings</span>
+                    </li>
+                    <li
+                        class="menu-item {{ Request::is('admin/settings') ? 'active' : '' }}">
+                        <a href="{{ url('admin/settings') }}"
+                            class="menu-link {{ Request::is('admin/settings') ? '' : 'text-dark' }} d-flex align-items-center">
+                            <i class="menu-icon tf-icons bx bx-cog"></i>
+                            <div data-i18n="Support" class="flex-grow-1">Settings</div>
+                        </a>
+                    </li>
+
 
 
 
@@ -332,7 +345,7 @@
                                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
                                     data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
-                                        <img src="{{ asset('uploads/c2.png') }}" alt
+                                        <img src="{{ asset(site_logo()) }}" alt
                                             class="w-px-40 h-auto rounded-circle" />
                                     </div>
                                 </a>
@@ -342,7 +355,7 @@
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
-                                                        <img src="{{ asset('uploads/c2.png') }}" alt
+                                                        <img src="{{ asset(site_logo()) }}" alt
                                                             class="w-px-40 h-auto rounded-circle" />
                                                     </div>
                                                 </div>
@@ -401,7 +414,7 @@
                         <div
                             class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
                             <div class="mb-2 mb-md-0">
-                                © Pearls By HM
+                                © {{ site_name() }}
                                 <script>
                                     document.write(new Date().getFullYear());
                                 </script>

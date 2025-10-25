@@ -35,28 +35,30 @@
 
                     <div class="carousel-inner">
 
-                        <!-- ✅ Main Image -->
                         <div class="carousel-item active">
-                            <img src="{{ asset($product->image) }}" class="d-block w-100 img-fluid rounded shadow-sm"
-                                style="max-height: 100%; object-fit: cover;">
+                            <div class="image-zoom-container">
+                                <img src="{{ asset($product->image) }}" class="d-block w-100 img-fluid rounded shadow-sm">
+                            </div>
                         </div>
 
-                        <!-- ✅ Hover Image (if available) -->
                         @if (!empty($product->hover_image))
                             <div class="carousel-item">
-                                <img src="{{ asset($product->hover_image) }}"
-                                    class="d-block w-100 img-fluid rounded shadow-sm"
-                                    style="max-height: 100%; object-fit: cover;">
+                                <div class="image-zoom-container">
+                                    <img src="{{ asset($product->hover_image) }}"
+                                        class="d-block w-100 img-fluid rounded shadow-sm">
+                                </div>
                             </div>
                         @endif
 
-                        <!-- ✅ Additional Images ($product_images) -->
                         @foreach ($product_images as $image)
                             <div class="carousel-item">
-                                <img src="{{ asset($image->image_path) }}" class="d-block w-100 img-fluid rounded shadow-sm"
-                                    style="max-height: 100%; object-fit: cover;">
+                                <div class="image-zoom-container">
+                                    <img src="{{ asset($image->image_path) }}"
+                                        class="d-block w-100 img-fluid rounded shadow-sm">
+                                </div>
                             </div>
                         @endforeach
+
 
                     </div>
 
@@ -175,4 +177,186 @@
             </div>
         </div>
     </div>
+
+
+    <div class="container-fluid">
+        <h3 class="text-center mt-4 fw-bold" style="font-family: Arial, sans-serif">Related Products</h3>
+        @if ($related_products->count() > 0)
+            <div class="row justify-content-around g-2 mt-2">
+                @foreach ($related_products as $product)
+                    <div class="col-lg-3 col-12 col-md-4 col-sm-6">
+                        <a href="{{ route('prduct.details', ['url' => $product->url]) }}" class="nav-link">
+                            <div class="card rounded-0 product-card">
+                                <div class="image-wrapper">
+                                    <img class="main-image img-fluid" src="{{ asset($product->image) }}"
+                                        alt="{{ $product->name }}">
+                                    <img class="hover-image img-fluid" src="{{ asset($product->hover_image) }}"
+                                        alt="{{ $product->name }}">
+                                </div>
+                                <h5 class="text-center mt-2 custom-font2">{{ $product->name }}</h5>
+
+                                <div class="d-flex justify-content-center gap-4">
+                                    <h6 class="text-center mb-2 custom-font2">
+                                        <del>{{ 'Rs.' . number_format($product->actual_price, 2) }}</del>
+                                    </h6>
+                                    <h6 class="text-center mb-2 custom-font2" style="color: rgb(224, 7, 7)">
+                                        {{ 'Rs.' . number_format($product->price, 2) }}</h6>
+                                </div>
+
+                                <div class="p-2">
+                                    <form action="{{ route('cart.add') }}" method="POST" class="me-1 w-100">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="qty" value="1">
+                                        <button type="submit" class="btn-solid-black2 w-100">Add to Cart</button>
+                                    </form>
+
+                                    <form action="{{ route('wishlist.add') }}" method="POST" class="w-100 mt-1">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <button type="submit" class="btn-outline-black2 w-100">ADD TO WISHLIST</button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <div class="text-center my-5">
+                <i style="font-size: 110px;" class="bi bi-emoji-frown"></i>
+                <h2 class="text-dark fw-bold" style="font-family:Arial, sans-serif">No Related Products Found...</h2>
+                <p class="text-secondary" style="font-family:Arial, sans-serif">Looks like no products there.
+                </p>
+                <a href="{{ route('products.all') }}" class="btn-solid-black w-75 nav-link mt-3">
+                    BROWSE OTHERS
+                </a>
+            </div>
+
+        @endif
+
+    </div>
+
+
+
+    <style>
+        .btn-outline-black2,
+        .btn-solid-black2 {
+            display: inline-block;
+            font-family: 'Montserrat', Arial, sans-serif;
+            letter-spacing: 2px;
+            padding: 8px 0px;
+            font-size: 15px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 0;
+            box-shadow: none;
+            transition: all 0.4s ease;
+        }
+
+        .custom-font2 {
+            font-family: Arial, sans-serif;
+            letter-spacing: 1px;
+            font-size: 18px;
+        }
+
+        .btn-outline-black2 {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #000;
+        }
+
+        .btn-outline-black2:hover {
+            background-color: #000;
+            color: #fff;
+            border-color: #000;
+            opacity: 0.9;
+        }
+
+        .btn-solid-black2 {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid transparent;
+            text-transform: uppercase;
+        }
+
+        .btn-solid-black2:hover {
+            background-color: #fff;
+            color: #000;
+            border-color: #000;
+            opacity: 0.9;
+        }
+    </style>
+    <style>
+        .product-card .image-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card .image-wrapper img {
+            width: 100%;
+            display: block;
+            transition: opacity 0.5s ease, transform 0.6s ease;
+            transform: scale(1);
+        }
+
+        .product-card .image-wrapper .hover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+
+        /* Hover effect */
+        .product-card:hover .image-wrapper .hover-image {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .product-card:hover .image-wrapper .main-image {
+            opacity: 0;
+            transform: scale(1.1);
+        }
+    </style>
+
+    <style>
+        .image-zoom-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-zoom-container img {
+            width: 100%;
+            transition: transform 0.1s ease-in-out;
+        }
+
+        .image-zoom-container.zoom-active img {
+            transform: scale(2);
+            /* Zoom Level — increase if needed */
+            cursor: crosshair;
+        }
+    </style>
+
+
+    <script>
+        document.querySelectorAll('.image-zoom-container').forEach(container => {
+            const img = container.querySelector('img');
+
+            container.addEventListener('mousemove', function(e) {
+                const rect = container.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width * 100;
+                const y = (e.clientY - rect.top) / rect.height * 100;
+
+                container.classList.add('zoom-active');
+                img.style.transformOrigin = `${x}% ${y}%`;
+            });
+
+            container.addEventListener('mouseleave', function() {
+                container.classList.remove('zoom-active');
+                img.style.transformOrigin = 'center';
+            });
+        });
+    </script>
+
 @endsection

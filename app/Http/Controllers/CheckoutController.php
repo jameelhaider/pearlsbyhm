@@ -46,7 +46,7 @@ class CheckoutController extends Controller
         $subtotal = $cartItems->sum(function ($item) {
             return $item->price * $item->qty;
         });
-        $shipping = $subtotal >= 2000 ? 0 : 260;
+        $shipping = $subtotal >= shipping_free_on() ? 0 : shipping_charges();
         $total = $subtotal + $shipping;
         $addresses = $userId
             ? DB::table('addresses')->where('user_id', $userId)->get()
@@ -674,7 +674,7 @@ class CheckoutController extends Controller
         if ($items->isEmpty()) abort(redirect()->back()->with('error', 'Your cart is empty.'));
 
         $subtotal = $items->sum(fn($i) => $i->price * $i->qty);
-        $shipping = $subtotal >= 2000 ? 0 : 260;
+        $shipping = $subtotal >= shipping_free_on() ? 0 : shipping_charges();
 
         return compact('cart', 'items', 'subtotal', 'shipping');
     }

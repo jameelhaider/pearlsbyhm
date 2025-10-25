@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Pearls By HM - Online Shopping Store')
+@section('title', site_name().' - Online Shopping Store')
 @section('content')
 
     <style>
@@ -53,7 +53,8 @@
 
 
     <div class="container-fluid">
-        <h3 class="text-center mt-4 fw-bold" style="font-family: Arial, sans-serif">Latest Products</h3>
+   @if ($products->count()>0)
+            <h3 class="text-center mt-4 fw-bold" style="font-family: Arial, sans-serif">Latest Products</h3>
         <div class="text-center">
             <a href="{{ route('products.all') }}">View All Products</a>
         </div>
@@ -99,6 +100,7 @@
                 </div>
             @endforeach
         </div>
+   @endif
     </div>
 
     <style>
@@ -143,7 +145,7 @@
                     <div class="feature-box p-4 rounded-0 shadow-sm bg-white h-100">
                         <i class="bi bi-truck display-5 text-primary mb-3"></i>
                         <h5 class="fw-bold">Free Shipping</h5>
-                        <p class="text-muted small mb-0">Free nationwide delivery on orders above Rs. 2000.</p>
+                        <p class="text-muted small mb-0">Free nationwide delivery on orders above Rs. {{ number_format(shipping_free_on()) }}</p>
                     </div>
                 </div>
 

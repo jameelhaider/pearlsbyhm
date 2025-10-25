@@ -1,6 +1,6 @@
 <x-mail::message>
     <div style="text-align: center;">
-    <img src="https://test.pearlsbyhm.com/uploads/c2.png" alt="Logo" style="width: 120px; height: 110; margin-bottom: 20px;">
+    <img src="https://test.pearlsbyhm.com/uploads/Site%20Logos/1761395778_68fcc4421d383.png" alt="Logo" style="width: 120px; height: 110; margin-bottom: 20px;">
 </div>
 
 {{-- Greeting --}}

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @php
-    $title = $category->name . ' - Pearls By HM';
+    $title = $category->name . ' - '.site_name();
 @endphp
 @section('title', $title)
 @section('content')
@@ -59,6 +59,9 @@
                     <a href="{{ url('/') }}">Home</a>
                 </li>
 
+                   <li class="breadcrumb-item">
+                            <a href="{{ route('products.all') }}">All Products</a>
+                        </li>
                 @foreach ($breadcrumbs as $crumb)
                     @if (!$loop->last)
                         <li class="breadcrumb-item">

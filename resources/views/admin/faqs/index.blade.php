@@ -64,8 +64,8 @@
                         <thead>
                             <tr>
                                 <th style="font-size:14px;" class="text-dark fw-bold text-center">#</th>
-                                <th style="font-size:14px;" class="text-dark fw-bold">Question</th>
-                                <th style="font-size:14px;" class="text-dark fw-bold">Answer</th>
+                                <th style="font-size:14px;width:37%" class="text-dark fw-bold">Question</th>
+                                <th style="font-size:14px;width:45%" class="text-dark fw-bold">Answer</th>
                                 <th style="font-size:14px" class="text-dark fw-bold text-center">Action</th>
                             </tr>
                         </thead>
@@ -73,13 +73,13 @@
                             @foreach ($faqs as $key => $faq)
                                 <tr>
                                     <td class="text-dark text-center">{{ ++$key }}</td>
-                                    <td class="fw-bold">
-                                        <a href="{{ route('admin.faq.edit', ['id' => $faq->id]) }}">
+                                    <td class="text-dark">
+                                        <a class="text-dark" href="{{ route('admin.faq.edit', ['id' => $faq->id]) }}">
                                             {{ $faq->question }}
                                         </a>
                                     </td>
-                                    <td class="fw-bold">
-                                        <a href="{{ route('admin.faq.edit', ['id' => $faq->id]) }}">
+                                    <td class="text-dark">
+                                        <a class="text-dark" href="{{ route('admin.faq.edit', ['id' => $faq->id]) }}">
                                             {{ $faq->answer }}
                                         </a>
                                     </td>

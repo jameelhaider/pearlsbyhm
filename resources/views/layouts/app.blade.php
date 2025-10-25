@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('uploads/c2.png') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset(site_logo()) }}" />
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -207,13 +207,13 @@
 
     <div id="app">
         <div class="py-1" style="background-color: #000;color:white">
-            <h5 class="text-center mt-1" style="font-family: Arial, sans-serif">Free delivery on order above 2000.</h5>
+            <h5 class="text-center mt-1" style="font-family: Arial, sans-serif">Free delivery on order above {{'Rs.'. number_format(shipping_free_on()) }}</h5>
         </div>
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{ url('/') }}"><img src="{{ asset('uploads/c2.png') }}"
+                <a class="navbar-brand" href="{{ url('/') }}"><img src="{{ asset(site_logo()) }}"
                         height="60px" width="70px" alt=""> <span style="font-size: 20px"
-                        class="fw-bold">Pearls By HM</span></a>
+                        class="fw-bold">{{ site_name() }}</span></a>
 
                 {{-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -866,10 +866,9 @@
 
                 <!-- Brand / About -->
                 <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold text-uppercase mb-3">Pearls By HM</h5>
+                    <h5 class="fw-bold text-uppercase mb-3">{{ site_name() }}</h5>
                     <p class="small text-light">
-                        We bring you premium quality products with fast delivery and reliable customer service across
-                        Pakistan.
+                      {{ site_description() }}
                     </p>
                     <div>
                         <a href="#" class="text-light me-3 fs-5"><i class="bi bi-facebook"></i></a>
@@ -889,6 +888,9 @@
                                 Wishlist</a></li>
                         <li class="mb-2"><a href="{{ route('track.order') }}" class="footer-link">Track My
                                 Order</a></li>
+                                @foreach (getCategories() as $category)
+ <li class="mb-2"><a href="{{ route('category.show',['url'=>$category->url]) }}" class="footer-link">{{'Shop For '. $category->name }}</a></li>
+                                @endforeach
                     </ul>
                 </div>
 
@@ -919,6 +921,10 @@
                     <a href="https://wa.me/923158425273" target="_BLANK" class="nav-link">
                         <p class="small mb-1"><i class="bi bi-telephone-fill me-2"></i>+92 315 8425273</p>
                     </a>
+                    <a href="mailto:pearlsbyhm@gmail.com" target="_blank" class="nav-link d-block">
+                        <p class="small mb-1"><i class="bi bi-envelope-fill me-2"></i>pearlsbyhm@gmail.com</p>
+                    </a>
+
 
                 </div>
 
@@ -929,7 +935,7 @@
 
         <!-- Bottom -->
         <div class="text-center small text-light">
-            © <span id="year"></span> Pearls By HM. All Rights Reserved. <br>
+            © <span id="year"></span> {{ site_name() }}. All Rights Reserved. <br>
             Developed by
             <a href="https://wa.me/923366886889" target="_blank"
                 class="text-success text-decoration-none fw-semibold">

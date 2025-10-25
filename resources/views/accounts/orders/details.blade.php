@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @php
-    $title = 'Order Details # ' . $order->tracking_id . ' - Pearls By HM';
+    $title = 'Order Details # ' . $order->tracking_id . ' - '.site_name();
 @endphp
 @section('title', $title)
 

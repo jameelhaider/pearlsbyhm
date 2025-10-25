@@ -7,12 +7,12 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <title>Pearls By HM | Admin | Sign In</title>
+    <title>{{ site_name() }} | Admin | Sign In</title>
 
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('uploads/c2.png') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset(site_logo()) }}" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -59,11 +59,11 @@
                         <!-- Logo -->
                         <div class="app-brand justify-content-center">
                             <a href="{{ url('/admin/dashboard') }}" class="app-brand-link gap-2">
-                             <img src="{{ asset('uploads/c2.png') }}" style="width:100%" height="150px" alt="">
+                             <img src="{{ asset(site_logo()) }}" style="width:100%" height="150px" alt="">
                             </a>
                         </div>
                         <!-- /Logo -->
-                        <h5 class="mb-3 text-center">Welcome to Pearls By HM! 👋</h5>
+                        <h5 class="mb-3 text-center">Welcome to {{ site_name() }}! 👋</h5>
 
                         <form id="formAuthentication" class="mb-3" action="{{ route('admin.login.submit') }}" method="POST">
                             @csrf

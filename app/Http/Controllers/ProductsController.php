@@ -184,7 +184,12 @@ class ProductsController extends Controller
         }
         $breadcrumbs = array_reverse($breadcrumbs);
         $product_images = $product->images;
-        return view('products.details', compact('product', 'breadcrumbs', 'product_images'));
+        $related_products = \App\Models\Product::where('category_id', $product->category_id)
+        ->where('id', '!=', $product->id)
+        ->limit(16)
+        ->get();
+        // return $related_products;
+        return view('products.details', compact('product', 'breadcrumbs', 'product_images','related_products'));
     }
 
 
@@ -202,8 +207,8 @@ class ProductsController extends Controller
             }
             $productImages = DB::table('product_images')->where('product_id', $id)->get();
             foreach ($productImages as $img) {
-                if (!empty($img->image) && file_exists(public_path($img->image))) {
-                    unlink(public_path($img->image));
+                if (!empty($img->image_path) && file_exists(public_path($img->image_path))) {
+                    unlink(public_path($img->image_path));
                 }
             }
             DB::table('product_images')->where('product_id', $id)->delete();

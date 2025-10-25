@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'My Addresses - Pearls By HM')
+@section('title', 'My Addresses - '.site_name())
 
 @section('content')
     <div class="container-fluid py-4 px-4">

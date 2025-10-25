@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Reset Password - Pearls By HM')
+@section('title', 'Reset Password - '.site_name())
 @section('content')
     <div class="container py-4">
         <nav aria-label="breadcrumb">

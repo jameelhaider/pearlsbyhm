@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Checkout - Pearls BY HM')
+@section('title', 'Checkout - '.site_name())
 
 @section('content')
 
@@ -348,7 +348,7 @@
                         <div class="col-lg-12 p-3 border border-dark rounded-3">
                             <div class="row align-items-center">
                                 <div class="col-lg-6 col-8 col-sm-8">
-                                    @if ($total < 2000)
+                                    @if ($total < shipping_free_on())
                                         <h5 class="mb-0" style="font-family:Arial, sans-serif">
                                             <i class="bi bi-record-circle me-2"></i>
                                             Standard
@@ -361,9 +361,10 @@
                                     @endif
                                 </div>
                                 <div class="col-lg-6 col-4 col-sm-4">
-                                    @if ($total < 2000)
+                                    @if ($total <  shipping_free_on() )
                                         <h5 class="float-end fw-bold mb-0" style="font-family:Arial, sans-serif">Rs.
-                                            260.00
+
+                                            {{ number_format(shipping_charges(),2) }}
                                         </h5>
                                     @else
                                         <h5 class="float-end fw-bold mb-0 text-success"

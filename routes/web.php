@@ -28,6 +28,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware('admin.auth')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/settings', [AdminDashboardController::class, 'settings'])->name('settings');
+        Route::post('/settings/update', [AdminDashboardController::class, 'settingsupdate'])->name('settings.update');
+
         Route::get('/orders/{status}', [OrdersController::class, 'index'])->name('orders');
         Route::get('/order/{id}/details', [OrdersController::class, 'details'])->name('order.details');
         Route::get('/order/{id}/update/status/{status}', [OrdersController::class, 'updatestatus'])->name('order.status.update');

@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @if ($address->id)
-    @section('title', 'Edit Address - Pearls By HM')
+    @section('title', 'Edit Address - '.site_name())
 @else
-    @section('title', 'Add Address - Pearls By HM')
+    @section('title', 'Add Address - '.site_name())
 @endif
 
 @section('content')
