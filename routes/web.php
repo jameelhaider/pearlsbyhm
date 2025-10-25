@@ -11,8 +11,12 @@ use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\SlidesController;
 use App\Http\Controllers\WishlistController;
+use App\Mail\DatabaseBackupMail;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 
 
@@ -22,7 +26,63 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
+
+
 Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/export-database', function () {
+        $date = Carbon::now()->format('d_M_y_h_i_A');
+        $filename = "Backup_Pearls_By_HM_$date.sql";
+        $tables = DB::select('SHOW TABLES');
+        $tableNames = array_map('current', $tables);
+        $sql = '';
+
+        foreach ($tableNames as $table) {
+            $createTableQuery = DB::select("SHOW CREATE TABLE `$table`");
+            $sql .= $createTableQuery[0]->{'Create Table'} . ";\n\n";
+            $rows = DB::table($table)->get();
+            foreach ($rows as $row) {
+                $values = array_map(function ($value) {
+                    return DB::connection()->getPdo()->quote($value);
+                }, (array) $row);
+
+                $sql .= "INSERT INTO `$table` VALUES (" . implode(', ', $values) . ");\n";
+            }
+            $sql .= "\n\n";
+        }
+
+        return Response::make($sql, 200, [
+            'Content-Type' => 'application/sql',
+            'Content-Disposition' => "attachment; filename=\"$filename\"",
+        ]);
+    })->name('export.database');
+
+    Route::get('/send-database-backup', function () {
+        $date = Carbon::now()->format('d_M_y_h_i_A');
+        $filename = "Backup_Pearls_By_HM_$date.sql";
+        $tables = DB::select('SHOW TABLES');
+        $tableNames = array_map('current', $tables);
+        $sql = '';
+
+        foreach ($tableNames as $table) {
+            $createTableQuery = DB::select("SHOW CREATE TABLE `$table`");
+            $sql .= $createTableQuery[0]->{'Create Table'} . ";\n\n";
+            $rows = DB::table($table)->get();
+            foreach ($rows as $row) {
+                $values = array_map(function ($value) {
+                    return DB::connection()->getPdo()->quote($value);
+                }, (array) $row);
+
+                $sql .= "INSERT INTO `$table` VALUES (" . implode(', ', $values) . ");\n";
+            }
+            $sql .= "\n\n";
+        }
+        Mail::to(['jameelhaider047@gmail.com', 'pearlsbyhm@gmail.com'])
+            ->send(new DatabaseBackupMail($sql, $filename));
+        return redirect()->back()->with('success', 'Database backup sent to email successfully.');
+    })->name('send.database.backup');
+
+
     Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AdminAuthController::class, 'login'])->name('login.submit');
 

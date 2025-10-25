@@ -223,7 +223,7 @@
                         </a>
                     </li>
 
-                       <li class="menu-item {{ Request::is('admin/orders/cancelled') ? 'active' : '' }}">
+                    <li class="menu-item {{ Request::is('admin/orders/cancelled') ? 'active' : '' }}">
                         <a href="{{ url('admin/orders/cancelled') }}"
                             class="menu-link d-flex align-items-center {{ Request::is('admin/orders/cancelled') ? '' : 'text-dark' }}">
                             <i class="menu-icon tf-icons bx bx-x"></i>
@@ -281,7 +281,7 @@
 
 
 
-                     <li
+                    <li
                         class="menu-header small text-uppercase fw-bold {{ Request::is('admin/faqs') || Request::is('admin/faqs/create') ? '' : 'text-dark' }}">
                         <span class="menu-header-text">FAQs</span>
                     </li>
@@ -294,18 +294,37 @@
                         </a>
                     </li>
 
-                     <li
+                    <li
                         class="menu-header small text-uppercase fw-bold {{ Request::is('admin/settings') ? '' : 'text-dark' }}">
                         <span class="menu-header-text">Settings</span>
                     </li>
-                    <li
-                        class="menu-item {{ Request::is('admin/settings') ? 'active' : '' }}">
+                    <li class="menu-item {{ Request::is('admin/settings') ? 'active' : '' }}">
                         <a href="{{ url('admin/settings') }}"
                             class="menu-link {{ Request::is('admin/settings') ? '' : 'text-dark' }} d-flex align-items-center">
                             <i class="menu-icon tf-icons bx bx-cog"></i>
                             <div data-i18n="Support" class="flex-grow-1">Settings</div>
                         </a>
                     </li>
+
+
+                    <li class="menu-header small text-uppercase text-dark fw-bold"><span
+                            class="menu-header-text">Actions</span></li>
+                    <div class="px-3">
+                        <a href="{{ route('admin.export.database') }}" class="btn btn-primary w-100">
+                            Export Back Up
+                        </a>
+                        <a href="{{ route('admin.send.database.backup') }}" class="btn btn-primary w-100 mt-2">
+                            Send Backup To Mail
+                        </a>
+
+                        <form action="{{ route('admin.logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-primary w-100 mt-2 mb-4">
+                                Log Out
+                            </button>
+                        </form>
+
+                    </div>
 
 
 
