@@ -63,18 +63,38 @@ class OrdersController extends Controller
         $order = Order::findOrFail($id);
         $order->status = $status;
         $order->save();
-
         try {
+            $email = $order->email;
             if ($status == 'In Process') {
-                Notification::route('mail', $order->email)->notify(new OrderInProcessUserNotification($order));
+                Notification::route('mail', $email)
+                    ->notify(
+                        (new OrderInProcessUserNotification($order))
+                            ->delay(now()->addMinute())
+                    );
             } elseif ($status == 'Packed, Ready To Ship') {
-                Notification::route('mail', $order->email)->notify(new OrderPackedUserNotification($order));
+                Notification::route('mail', $email)
+                    ->notify(
+                        (new OrderPackedUserNotification($order))
+                            ->delay(now()->addMinute())
+                    );
             } elseif ($status == 'Sent To Parcel Delivered Company') {
-                Notification::route('mail', $order->email)->notify(new OrderSentUserNotification($order));
+                Notification::route('mail', $email)
+                    ->notify(
+                        (new OrderSentUserNotification($order))
+                            ->delay(now()->addMinute())
+                    );
             } elseif ($status == 'Delivered') {
-                Notification::route('mail', $order->email)->notify(new OrderDeliveredUserNotification($order));
-            }elseif ($status == 'Cancelled') {
-                Notification::route('mail', $order->email)->notify(new OrderCancelledUserNotification($order));
+                Notification::route('mail', $email)
+                    ->notify(
+                        (new OrderDeliveredUserNotification($order))
+                            ->delay(now()->addMinute())
+                    );
+            } elseif ($status == 'Cancelled') {
+                Notification::route('mail', $email)
+                    ->notify(
+                        (new OrderCancelledUserNotification($order))
+                            ->delay(now()->addMinute())
+                    );
             }
         } catch (\Exception $e) {
             Log::error('Order email failed: ' . $e->getMessage());

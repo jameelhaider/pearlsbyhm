@@ -41,6 +41,6 @@ class OrderCancelledUserNotification extends Notification implements ShouldQueue
             ->line('This may have occurred due to a stock issue, payment problem, or cancellation request.')
             ->line('If you believe this was a mistake or would like more details, please contact our support team.')
             ->line('We’re sorry for any inconvenience caused and appreciate your understanding.')
-            ->salutation('Warm regards, Pearls By HM Team');
+            ->salutation('Warm regards, '.site_name().' Team');
     }
 }

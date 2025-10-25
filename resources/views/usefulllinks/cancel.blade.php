@@ -14,7 +14,7 @@
 
         <div class="mb-4" style="font-family: Arial, sans-serif; line-height: 1.7;">
             <p>
-                At <strong>Pearls By HM</strong>, we understand that sometimes you may need to cancel an order.
+                At <strong>{{ site_name() }}</strong>, we understand that sometimes you may need to cancel an order.
                 However, to ensure smooth operations and timely deliveries, we have a clear order cancellation policy.
             </p>
 

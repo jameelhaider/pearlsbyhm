@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Notifications\WelcomeUserNotification;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -123,7 +124,7 @@ class RegisterController extends Controller
                         (new \App\Notifications\WelcomeUserNotification(
                             $user->email,
                             $password
-                        ))
+                        ))->delay(Carbon::now()->addMinute())
                     );
                 }
             }

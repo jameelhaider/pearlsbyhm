@@ -13,11 +13,13 @@ use App\Http\Controllers\SlidesController;
 use App\Http\Controllers\WishlistController;
 use App\Mail\DatabaseBackupMail;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -150,6 +152,17 @@ Route::get('/', function () {
 
     return view('welcome', compact('products'));
 })->name('welcome');
+
+Route::get('/clear-queue', function () {
+    $pendingJobs = DB::table('jobs')->count();
+    if ($pendingJobs > 0) {
+        Artisan::call('queue:work --once');
+        return "Processed {$pendingJobs} queued jobs";
+    }
+    return 'No pending jobs';
+})->name('clear.queue');
+
+
 
 
 Route::get('/faqs', function () {

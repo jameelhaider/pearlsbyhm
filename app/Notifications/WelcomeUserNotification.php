@@ -37,9 +37,9 @@ class WelcomeUserNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('Welcome to Pearls By HM 🎉')
+            ->subject('Welcome to ' . site_name() . ' 🎉')
             ->greeting('Hello ' . $notifiable->name . '!')
-            ->line('We’re excited to have you join the Pearls By HM family.')
+            ->line('We’re excited to have you join the ' . site_name() . ' family.')
             ->line('Here are your account details:')
             ->line('**Email:** ' . $this->email)
             ->line('**Password:** ' . $this->password)
@@ -51,6 +51,6 @@ class WelcomeUserNotification extends Notification implements ShouldQueue
             ->line('')
             ->line('Simply log in anytime to enjoy a smoother shopping experience.')
             ->action('Login Now', url('/login'))
-            ->line('Thank you for choosing Pearls By HM!');
+            ->line('Thank you for choosing ' . site_name() . '!');
     }
 }

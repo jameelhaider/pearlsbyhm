@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Checkout - '.site_name())
+@section('title', 'Checkout - Pearls BY HM')
 
 @section('content')
 
@@ -22,7 +22,6 @@
                     <h4 class="fw-bold" style="font-family: Arial, sans-serif">Delivery</h4>
 
                     <div class="accordion" id="accordionExample">
-
                         {{-- Address Method Dropdown --}}
                         @if (Auth::check() && $addresses->count() > 0)
                             <label for="address_method" class="custom-font my-1">
@@ -348,7 +347,7 @@
                         <div class="col-lg-12 p-3 border border-dark rounded-3">
                             <div class="row align-items-center">
                                 <div class="col-lg-6 col-8 col-sm-8">
-                                    @if ($total < shipping_free_on())
+                                    @if ($total < 2000)
                                         <h5 class="mb-0" style="font-family:Arial, sans-serif">
                                             <i class="bi bi-record-circle me-2"></i>
                                             Standard
@@ -361,10 +360,10 @@
                                     @endif
                                 </div>
                                 <div class="col-lg-6 col-4 col-sm-4">
-                                    @if ($total <  shipping_free_on() )
+                                    @if ($total < shipping_free_on())
                                         <h5 class="float-end fw-bold mb-0" style="font-family:Arial, sans-serif">Rs.
 
-                                            {{ number_format(shipping_charges(),2) }}
+                                            {{ number_format(shipping_charges(), 2) }}
                                         </h5>
                                     @else
                                         <h5 class="float-end fw-bold mb-0 text-success"

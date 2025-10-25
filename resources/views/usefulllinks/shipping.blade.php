@@ -13,7 +13,7 @@
 
         <h3 class="mb-4 fw-bold" style="font-family: Arial, sans-serif">Shipping Policy</h3>
         <p style="font-family: Arial, sans-serif; line-height: 1.7;">“Cash On Delivery” orders will be processed after
-            successful telephonic verification. However, Pearls By HM holds the right
+            successful telephonic verification. However, {{ site_name() }} holds the right
             to process “Cash on Delivery” orders without telephonic verification for verified customers and/or during a
             period of high volume that includes sales, season launches, and other promotions.
             Shipping The customer usually gets an order in 7 business days after the order has shipped out. This is just an

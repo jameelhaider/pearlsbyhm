@@ -34,7 +34,7 @@ class OrderDeliveredUserNotification extends Notification implements ShouldQueue
             ->line('')
             ->action('Check Order Status', $trackingUrl)
             ->line('')
-            ->line('Thank you for trusting Pearls By HM 💎')
-            ->salutation('Warm regards, Pearls By HM Team');
+            ->line('Thank you for trusting '.site_name().' 💎')
+            ->salutation('Warm regards, '.site_name().' Team');
     }
 }

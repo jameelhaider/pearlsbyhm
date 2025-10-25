@@ -12,7 +12,7 @@
 
         <h3 class="mb-4 fw-bold" style="font-family: Arial, sans-serif">Exchange & Return Policy</h3>
 
-        <p style="font-family: Arial, sans-serif; line-height: 1.7;"> At <strong>Pearls By HM</strong>, we take great pride
+        <p style="font-family: Arial, sans-serif; line-height: 1.7;"> At <strong>{{ site_name() }}</strong>, we take great pride
             in offering high-quality handmade bracelets and jewelry pieces crafted with care and attention to detail. Please
             note that we <strong>do not offer exchanges or returns</strong> on any products once an order has been placed.
             Each item is carefully inspected before dispatch to ensure it meets our quality standards. We encourage all

@@ -15,5 +15,6 @@ class Address extends Model
         'phone',
         'postal_code',
         'landmark',
+        'url',
     ];
 }
