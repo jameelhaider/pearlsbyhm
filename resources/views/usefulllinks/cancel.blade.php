@@ -20,15 +20,15 @@
 
             <p>
                 Customers can request order cancellation <strong>only before the order is shipped</strong>.
-                If your order status is <span class="text-success">Pending</span>, <span class="text-success">In Process</span>,
-                <span class="text-success">Packed,</span> <span class="text-success">Ready To Ship</span>,
+                If your order status is <span class="text-success">Pending</span>, <span class="text-success">In Process</span>
                 you may request cancellation by contacting our <strong>Support Team</strong>.
                 Please note that customers <u>cannot directly cancel orders</u> through the website;
                 cancellation requests must be made via customer support.
             </p>
 
             <p>
-                Once your order has been handed over to the courier (status:
+                Once your order status is (status:
+                <span class="text-danger">Packed, Ready To Ship</span>,
                 <span class="text-danger">Sent To Parcel Delivered Company</span> or
                 <span class="text-danger">Delivered</span>), it <strong>cannot be cancelled</strong>.
             </p>
@@ -58,8 +58,8 @@
                     </tr>
                     <tr>
                         <td>Packed, Ready To Ship</td>
-                        <td class="text-success fw-bold">✅ Yes</td>
-                        <td>Contact Support Team</td>
+                        <td class="text-danger fw-bold">❌ No</td>
+                        <td>Not Eligible</td>
                     </tr>
                     <tr>
                         <td>Sent To Parcel Delivered Company</td>

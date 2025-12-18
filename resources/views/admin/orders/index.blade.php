@@ -231,7 +231,8 @@
                                                 @if (
                                                     $order->status != 'Cancelled' &&
                                                         $order->status != 'Sent To Parcel Delivered Company' &&
-                                                        $order->status != 'Delivered')
+                                                        $order->status != 'Delivered' &&
+                                                        $order->status != 'Packed, Ready To Ship')
                                                     <li>
                                                         <a class="dropdown-item"
                                                              onclick="confirmAction('{{ route('admin.order.status.update', ['id' => $order->id, 'status' => 'Cancelled']) }}','Cancell')">
